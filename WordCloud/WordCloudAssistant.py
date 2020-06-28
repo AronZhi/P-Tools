@@ -24,30 +24,27 @@ class WordCloudAssistant(object):
         return res
 
 
-    def Generate(self, text: str,  backgroundFile: str = '', isChines: bool = False):
+    def Generate(self, text: str,  backgroundFile: str = '', isChines: bool = False, 
+        isSave: bool = False):
+        
         if isChines:
             text = self.TransCn(text)
 
+        arags = {}
+        arags['font_path'] = self.fontPath
+        arags['background_color'] = self.backgroundColor
         if backgroundFile:
             image = PIL.Image.open(backgroundFile)
             mask = numpy.array(image)
+            arags['mask'] = mask
 
-            cloud = wordcloud.WordCloud(
-                font_path = self.fontPath,
-                background_color=self.backgroundColor,
-                mask = mask
-                ).generate(text)
-            
-            image_color = wordcloud.ImageColorGenerator(mask)
-            cloud.recolor(color_func=image_color)
-            image_produce = cloud.to_image()
-            image_produce.show()
+        cloud = wordcloud.WordCloud(**arags).generate(text)
+        
+        if backgroundFile:
+            image_color = wordcloud.ImageColorGenerator(arags['mask'])
+            cloud.recolor(color_func = image_color)
+
+        image_produce = cloud.to_image()
+        image_produce.show()
+        if isSave:
             cloud.to_file(self.output)
-        else:
-            cloud = wordcloud.WordCloud(font_path = self.fontPath,
-                background_color=self.backgroundColor).generate(text)
-            
-            image_produce = cloud.to_image()
-            image_produce.show()
-            cloud.to_file(self.output)
-               

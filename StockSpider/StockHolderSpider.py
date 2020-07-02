@@ -8,12 +8,15 @@ class StockHolderSpider(SpiderBase):
     def HandleStockHoldersHtml(self, html):
         sdltgdText = re.findall('var sdltgdData = \[.*\]', html)
         if sdltgdText:
-            text = sdltgdText[0][16:-1]
-            print(data)
+            text = sdltgdText[0][17:]
+            data = '{"sdltgd":' + text + '}'
+            sdltgdJson = json.loads(data)
+            print(sdltgdJson)
 
 
     def Crawl(self):
-        html = self.GetHtml('http://data.eastmoney.com/stockdata/600598.html')
+        code = 600598
+        html = self.GetHtml('http://data.eastmoney.com/stockdata/%d.html' % code)
         if html:
             self.HandleStockHoldersHtml(html)
         else:

@@ -1,6 +1,5 @@
 from WordCloudAssistant import *
 
-
 def main():
     wcAssistant = WordCloudAssistant()
 

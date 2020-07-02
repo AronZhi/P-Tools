@@ -24,6 +24,8 @@ class LianjiaSpider(SpiderBase):
 
 
     def Crawl(self):
-        url = 'https://hz.lianjia.com/zufang/binjiang/pg2/#contentList'
-        html = self.GetHtml(url)
-        self.HandleHtml(html)
+        location = ['bingjiang', 'xiaoshan']
+        for item in location:
+            url = 'https://hz.lianjia.com/zufang/%s/pg2/#contentList' % item
+            html = self.GetHtml(url)
+            self.HandleHtml(html)

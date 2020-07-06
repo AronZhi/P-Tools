@@ -8,14 +8,14 @@ import csv
 class RentInfo(object):
     def __init__(self):
         self.downtown = ''
-        self.subDowntown = ''
+        self.street = ''
         self.community = ''
         self.area = 0
         self.rent = 0
     
 
     def __repr__(self):
-        return '%s, %s, %s, %d, %d' % (self.downtown, self.subDowntown, self.community, self.rent, self.area)
+        return '%s, %s, %s, %d, %d' % (self.downtown, self.street, self.community, self.rent, self.area)
 
 
 class LianjiaSpider(SpiderBase):
@@ -28,19 +28,11 @@ class LianjiaSpider(SpiderBase):
         if len(self.rentMap) == 0:
             return
 
-        head = ['downtown', 'sub_downtown', 'community', 'rent', 'area']
         with open('data.csv', 'w', encoding='utf8') as csvfile:
-            f = csv.DictWriter(csvfile, fieldnames = head)
-            f.writeheader()
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(['downtown', 'street', 'community', 'rent', 'area'])
             for rentInfo in self.rentMap:
-                line = {
-                    'downtown': rentInfo.downtown, 
-                    'sub_downtown': rentInfo.subDowntown, 
-                    'community': rentInfo.community, 
-                    'rent': str(rentInfo.rent), 
-                    'area': str(rentInfo.area)
-                }
-                f.writerow(line)
+                csv_writer.writerow([rentInfo.downtown, rentInfo.street, rentInfo.community, str(rentInfo.rent), str(rentInfo.area)])
 
 
     def ParseInfo(self, houseInfo):
@@ -48,7 +40,7 @@ class LianjiaSpider(SpiderBase):
         if res and len(res) == 3:
             rentInfo = RentInfo()
             rentInfo.downtown = res[0].text
-            rentInfo.subDowntown = res[1].text
+            rentInfo.street = res[1].text
             rentInfo.community = res[2].text
             rentStr = houseInfo.find(class_ = 'content__list--item-price').find('em').text
             rentInfo.rent = int(rentStr)

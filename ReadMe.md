@@ -5,3 +5,9 @@
 ### StockSpider
 * 股票爬虫，爬取东方财富股票信息。
 * 爬取的字段：十大流通股东
+
+### DBOperator
+* 数据库操作类，操作MySQL
+
+### WordCloud
+* 词云类，生成词云

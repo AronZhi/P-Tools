@@ -20,8 +20,14 @@ def GetHtml():
 
 def test_1():
     html = GetHtml()
-    lst = re.findall('[\u4e00-\u9fa5]{4,}', html)
-    print(lst)
+    lst = re.findall('w=((%[A-Z0-9]{2})){2,}">.*</a', html)
+    res = []
+    for item in lst:
+        start = item.find('>')
+        end = item.find('<')
+        text = itme[start+ 1, end]
+        res.append(text)
+    print(text)
     return
 
 def test_2():
@@ -32,8 +38,8 @@ def test_2():
         print(item.text)
 
 def main():
-    #test_1()
-    test_2()
+    test_1()
+    #test_2()
     return
 
 if __name__ == '__main__':

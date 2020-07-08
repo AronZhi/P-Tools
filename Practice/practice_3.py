@@ -1,18 +1,22 @@
 import multiprocessing
 import time
+import os
 
-def worker(interval):
-    n = 5
-    while n > 0:
-        print("The time is {0}".format(time.ctime()))
+def workFunc(loopCount, interval):
+    pid = os.getpid()
+    while loopCount > 0:
+        print('%d, %s: %d' % (pid, time.ctime(), loopCount))
         time.sleep(interval)
-        n -= 1
+        loopCount -= 1
+
+def test_1():
+    p = multiprocessing.Process(target = workFunc, args = (3, 1))
+    p.start()
+    print('main process pid:%d' % os.getpid())
+    print('sub process pid: %d' % p.pid)
+    print('sub process name: %s' % p.name)
+    p.join()
+    print('test_1 end')
 
 if __name__ == "__main__":
-    p = multiprocessing.Process(target = worker, args = (3,))
-    p.start()
-    print("p.pid: %d" % p.pid)
-    print("p.name: %s" % p.name)
-    print("p.is_alive: %d" % p.is_alive())
-    p.join()
-    print('end')
+    test_1()

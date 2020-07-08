@@ -19,18 +19,23 @@ def GetHtml():
         return 'except:' + e
 
 def test_1():
+    """
+    用正则来解析
+    """
     html = GetHtml()
-    lst = re.findall('w=((%[A-Z0-9]{2})){2,}">.*</a', html)
+    lst = re.findall('w=(?:%[A-Z0-9][A-Z0-9]){2,}">.*</a', html) #python的()中需加入?:来防止进入捕获模式
     res = []
     for item in lst:
         start = item.find('>')
         end = item.find('<')
-        text = itme[start+ 1, end]
-        res.append(text)
-    print(text)
+        res.append(item[start + 1 : end])
+    print(res)
     return
 
 def test_2():
+    """
+    用beautiful soup来解析
+    """
     html = GetHtml()
     soup = bs4.BeautifulSoup(html, 'html.parser')
     lst = soup.find(class_ = 'list-table').find_all(class_ = 'list-title')

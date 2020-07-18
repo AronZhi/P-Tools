@@ -1,4 +1,3 @@
-from SpiderBase import *
 import json
 import sys
 

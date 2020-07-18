@@ -1,8 +1,13 @@
 from bs4 import BeautifulSoup
-from SpiderBase import *
 import re
 import time
 import csv
+import sys
+
+sys.path.append('C:\WorkSpace\Test\Spider\Spider')
+from Spider import Spider
+from MsgType import msg_type
+from Msg import Msg
 
 
 class RentInfo(object):
@@ -18,9 +23,9 @@ class RentInfo(object):
         return '%s, %s, %s, %d, %d' % (self.downtown, self.street, self.community, self.rent, self.area)
 
 
-class LianjiaSpider(SpiderBase):
+class LianjiaSpider(Spider):
     def __init__(self):
-        SpiderBase.__init__(self)
+        Spider.__init__(self)
         self.rentMap = []
 
 
@@ -58,16 +63,21 @@ class LianjiaSpider(SpiderBase):
             self.ParseInfo(houseInfo)
 
 
-    def Crawl(self):
+    def HandleMsg(self, url, msg: Msg):
+        if msg.type == msg_type.success:
+            self.HandleHtml(msg.data)
+            return True
+        else:
+            print(msg.data)
+        return False
+
+
+    def Start(self):
         for index in range(1,100):
             url = 'https://hz.lianjia.com/zufang/pg%drco11/#contentList' % index
             if index == 1:
                 url = 'https://hz.lianjia.com/zufang/rco11/#contentList'
-            html = self.GetHtml(url)
-            if html:
-                self.HandleHtml(html)
-            else:
-                print(self.GetLastError())
+            self.Crawl(url)
             time.sleep(3)
         self.SaveData()
         

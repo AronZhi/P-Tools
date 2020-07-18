@@ -1,8 +1,15 @@
-from SpiderBase import *
+import bs4
+import sys
 
-class StockListSpider(SpiderBase):
+sys.path.append('C:\WorkSpace\Test\Spider\Spider')
+from Spider import Spider
+from MsgType import msg_type
+from Msg import Msg
+
+
+class StockListSpider(Spider):
     def __init__(self):
-        SpiderBase.__init__(self)
+        Spider.__init__(self)
         self.__shMainStocks = {}
         self.__szMainStocks = {}
         self.__cyStocks = {}
@@ -27,12 +34,17 @@ class StockListSpider(SpiderBase):
                 self.__kcStocks[num[0]] = name
 
 
-    def Crawl(self):
-        html = self.GetHtml('http://quote.eastmoney.com/stock_list.html')
-        if html:
-            self.HandleStockListHtml(html)
+    def HandleMsg(self, url, msg: Msg):
+        if msg.type == msg_type.success:
+            self.HandleStockListHtml(msg.data)
+            return True
         else:
-            print(self.GetLastError())
+            print(msg.data)
+        return False
+
+
+    def Start(self):
+        msg = self.Crawl('http://quote.eastmoney.com/stock_list.html')
 
 
     def GetSHMainStocks(self):

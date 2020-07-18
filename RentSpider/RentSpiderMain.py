@@ -2,7 +2,7 @@ from LianjiaSpider import *
 
 def main()->int:
     lianjia = LianjiaSpider()
-    lianjia.Crawl()
+    lianjia.Start()
     return 0
 
 if __name__ == '__main__':

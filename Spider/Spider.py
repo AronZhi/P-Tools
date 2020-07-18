@@ -10,9 +10,8 @@ class Spider(object):
     def __init__(self):
         self.param = SpiderParam()
 
-
-    def HandleMsg(self, msg: Msg):
-        print(msg)
+    
+    def HandleMsg(self, url, msg: Msg):
         return True
 
 
@@ -38,6 +37,6 @@ class Spider(object):
         return ret
 
 
-    def Crawl(self, url: str):
+    def Crawl(self, url: str)->Msg:
         msg = self._GetHtml(url)
-        self.HandleMsg(msg)
+        self.HandleMsg(url, msg)

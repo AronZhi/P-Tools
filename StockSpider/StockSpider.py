@@ -7,7 +7,7 @@ def main()->int:
     stockLst.Crawl()
     """
     stockHolders = StockHolderSpider()
-    stockHolders.Crawl()
+    stockHolders.Start()
     return 0
 
 

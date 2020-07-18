@@ -1,8 +1,16 @@
 from SpiderBase import *
 import json
-class StockHolderSpider(SpiderBase):
+import sys
+
+sys.path.append('C:\WorkSpace\Test\Spider\Spider')
+from Spider import Spider
+from MsgType import msg_type
+from Msg import Msg
+
+
+class StockHolderSpider(Spider):
     def __init__(self):
-        SpiderBase.__init__(self)
+        Spider.__init__(self)
 
 
     def HandleStockHoldersHtml(self, html):
@@ -12,13 +20,17 @@ class StockHolderSpider(SpiderBase):
             data = '{"sdltgd":' + text + '}'
             sdltgdJson = json.loads(data)
             print(sdltgdJson)
+    
 
-
-    def Crawl(self):
-        code = 600598
-        html = self.GetHtml('http://data.eastmoney.com/stockdata/%d.html' % code)
-        if html:
-            self.HandleStockHoldersHtml(html)
+    def HandleMsg(self, url, msg: Msg):
+        if msg.type == msg_type.success:
+            self.HandleStockHoldersHtml(msg.data)
+            return True
         else:
-            print(self.GetLastError())
-        
+            print(msg.data)
+        return False
+
+    
+    def Start(self):
+        code = '002463'
+        self.Crawl('http://data.eastmoney.com/stockdata/%s.html' % code)

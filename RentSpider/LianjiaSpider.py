@@ -34,7 +34,7 @@ class LianjiaSpider(Spider):
             return
 
         with open('data.csv', 'w', encoding='utf8') as csvfile:
-            csv_writer = csv.writer(csvfile)
+            csv_writer = csv.writer(csvfile, lineterminator='\n')
             csv_writer.writerow(['downtown', 'street', 'community', 'rent', 'area'])
             for rentInfo in self.rentMap:
                 csv_writer.writerow([rentInfo.downtown, rentInfo.street, rentInfo.community, str(rentInfo.rent), str(rentInfo.area)])

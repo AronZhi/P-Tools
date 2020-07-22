@@ -29,7 +29,8 @@ def AddSourceRoot(rootPath: str)->bool:
 
 
 def main():
-    ret = AddSourceRoot('C:\WorkSpace\Spider')
+    rootPath = input()
+    ret = AddSourceRoot(rootPath)
     print(ret)
 
 if __name__ == '__main__':

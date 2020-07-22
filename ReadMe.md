@@ -1,7 +1,7 @@
 ## Build
 * 需要将Spider加入到python搜索路径
 ```
-运行AddSource.py, 运行前要修改AddSourceRoot函数的参数
+运行AddSource.py, 输入指定的路径
 ```
 
 ## DbComponent

@@ -29,7 +29,7 @@ def AddSourceRoot(rootPath: str)->bool:
 
 
 def main():
-    rootPath = input()
+    rootPath = input('Please input root path:')
     ret = AddSourceRoot(rootPath)
     print(ret)
 

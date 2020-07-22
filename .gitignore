@@ -1,2 +1,4 @@
-*/__pycache__/
-*/.idea/
+SpiderUtil/*/__pycache__/
+Project/*/__pycache__/
+Test/__pycache__/
+.idea/

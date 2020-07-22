@@ -1,5 +1,6 @@
 import pymysql
-from Singleton import *
+from DbComponent.Singleton import *
+
 
 class DBConnection(object):
     def __init__(self, username = '', password = '', host = '', db = ''):

@@ -1,10 +1,9 @@
 import json
 import sys
 
-sys.path.append('C:\WorkSpace\Test\Spider\Spider')
-from Spider import Spider
-from MsgType import msg_type
-from Msg import Msg
+from SpiderComponent.Spider import Spider
+from MsgComponent.MsgType import msg_type
+from MsgComponent.Msg import Msg
 
 
 class StockHolderSpider(Spider):

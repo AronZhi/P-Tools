@@ -1,6 +1,6 @@
-from MsgType import msg_type
 import json
 import time
+from MsgComponent.MsgType import msg_type
 
 class Msg(object):
     def __init__(self):

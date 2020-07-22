@@ -1,5 +1,4 @@
-from MySqlMgr import *
-
+from DbComponent.MySqlMgr import *
 
 def main():
     g_mysql_mgr.SetDBConnectInfo('test_db', 'admin', 'P@ssword123', '10.224.84.59')

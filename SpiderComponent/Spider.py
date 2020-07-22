@@ -1,9 +1,9 @@
 import multiprocessing
 import requests
 import time
-from MsgType import msg_type
-from Msg import Msg
-from SpiderParam import SpiderParam
+from MsgComponent.MsgType import msg_type
+from MsgComponent.Msg import Msg
+from SpiderComponent.SpiderParam import SpiderParam
 
 
 class Spider(object):

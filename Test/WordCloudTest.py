@@ -1,4 +1,4 @@
-from WordCloudAssistant import *
+from WordCloud.WordCloudAssistant import *
 
 def main():
     wcAssistant = WordCloudAssistant()

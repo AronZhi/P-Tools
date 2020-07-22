@@ -1,3 +1,25 @@
+## Build
+* 需要将Spider加入到python搜索路径
+```
+运行AddSource.py, 运行前要修改AddSourceRoot函数的参数
+```
+
+## DbComponent
+* 数据库操作类，操作MySQL
+
+## MsgComponent
+* 消息传输和定义
+
+## SpiderComponent:
+* 爬虫基类， 需要自定义HandleMsg完成网页处理
+
+## WordCloud
+* 词云类，生成词云
+
+## Test
+* 测试代码
+
+## Project
 ### Practice
 * 爬虫学习代码
 
@@ -8,9 +30,3 @@
 ### StockSpider
 * 股票爬虫，爬取东方财富股票信息。
 * 爬取的字段：十大流通股东
-
-### DBOperator
-* 数据库操作类，操作MySQL
-
-### WordCloud
-* 词云类，生成词云

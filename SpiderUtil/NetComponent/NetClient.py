@@ -8,6 +8,12 @@ class NetClient(object):
         self.port = port
         self.socket = None
 
+
+    def __del__(self):
+        if self.socket:
+            self.socket.close()
+
+
     def Connect(self)->bool:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if self.socket:
@@ -15,19 +21,21 @@ class NetClient(object):
             return True
         return False
 
+
     def Disconnect(self):
         if self.socket:
             self.socket.close()
+            self.socket = None
 
     
-    def Send(self, data):
+    def Send(self, data: str):
         if self.socket:
-            self.socket.send(data)
+            self.socket.send(data.encode('utf8'))
 
     
     def Receive(self):
         if self.socket:
             data = self.socket.recv(g_netDataSize)
-            return data
+            return data.decode('utf8')
         return ''
         

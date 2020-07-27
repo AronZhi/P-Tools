@@ -2,14 +2,13 @@ from NetComponent.NetServer import NetServer
 from NetComponent.NetClient import NetClient
 
 def test_1():
-    server = NetServer(0)
+    server = NetServer(10000)
     server.Run()
-    print('start')
-    input()
     return
 
 def test_2():
-    client = NetClient()
+    ip = input('input server ip:')
+    client = NetClient(ip, 10000)
     client.Connect()
     print(client.Receive())
     client.Send('hello')

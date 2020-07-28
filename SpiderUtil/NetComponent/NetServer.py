@@ -7,19 +7,25 @@ class NetServer(object):
         self.host = socket.gethostbyname(socket.gethostname())
         self.port = port # port为0时，由系统决定端口
         self.socket = None
-
+        self.runlock = threading.Lock()
+        self.stop = False
 
     def __del__(self):
         if self.socket:
             self.socket.close()
 
 
-    def Communicate(self, clientSocket: socket.socket, data:str):
-        if clientSocket:
-            clientSocket.send(data.encode('utf8'))
-            data = clientSocket.recv(g_netDataSize)
-            print(data.decode('utf8'))
-        return
+    def Stop(self):
+        self.runlock.acquire()
+        self.stop = True
+        self.runlock.release()
+
+    
+    def IsStop(self):
+        self.runlock.acquire()
+        isStop = self.stop
+        self.runlock.release()
+        return isStop
 
 
     def Run(self):
@@ -28,6 +34,8 @@ class NetServer(object):
             self.socket.bind((self.host, self.port))
             self.socket.listen()
             print('listen %s:%d' % (self.host, self.port))
-            clientSocket, clientIp = self.socket.accept()
-            self.Communicate(clientSocket, 'hello client')
+            while not self.IsStop():
+                clientSocket, clientIp = self.socket.accept()
+                session = NetSession(clientSocket, clientIp)
+                session.Communicate()
         return

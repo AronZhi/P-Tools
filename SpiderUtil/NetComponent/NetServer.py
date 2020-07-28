@@ -1,5 +1,5 @@
 import socket
-import threading
+from threading import Lock
 from NetComponent.NetSession import *
 
 class NetServer(object):
@@ -7,7 +7,7 @@ class NetServer(object):
         self.host = socket.gethostbyname(socket.gethostname())
         self.port = port # port为0时，由系统决定端口
         self.socket = None
-        self.runlock = threading.Lock()
+        self.runlock = Lock()
         self.stop = False
 
     def __del__(self):
@@ -29,13 +29,27 @@ class NetServer(object):
 
 
     def Run(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if self.socket:
-            self.socket.bind((self.host, self.port))
-            self.socket.listen()
-            print('listen %s:%d' % (self.host, self.port))
-            while not self.IsStop():
-                clientSocket, clientIp = self.socket.accept()
-                session = NetSession(clientSocket, clientIp)
-                session.Communicate()
+        try:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            if self.socket:
+                self.socket.bind((self.host, self.port))
+                self.socket.listen()
+                print('listen %s:%d' % (self.host, self.port))
+                self.socket.settimeout(5)
+                while not self.IsStop():
+                    try:
+                        clientSocket, clientIp = self.socket.accept()
+                        print(clientIp)
+                        session = NetSession(clientSocket, clientIp)
+                        session.Communicate()
+                    except socket.timeout:
+                        print('wait long time')
+                        pass
+            
+                self.socket.close()
+                self.socket = None
+
+        except Exception as e:
+            print('server run error coour: %s' % e)
+        
         return

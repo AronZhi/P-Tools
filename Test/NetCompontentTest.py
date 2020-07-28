@@ -1,9 +1,14 @@
+import threading
 from NetComponent.NetServer import NetServer
 from NetComponent.NetClient import NetClient
 
 def test_1():
     server = NetServer(10000)
-    server.Run()
+    thread = threading.Thread(target=lambda server: server.Run(), args={server, })
+    thread.start()
+    input('input any to stop:')
+    server.Stop()
+    thread.join()
     return
 
 def test_2():
@@ -15,4 +20,4 @@ def test_2():
     client.Disconnect()
 
 if __name__ == '__main__':
-    test_2()
+    test_1()

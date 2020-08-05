@@ -1,12 +1,11 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
 class LogHandler(logging.Logger):
-    def __init__(self, name: str, filename = ''):
+    def __init__(self, name: str, logDir = ''):
         # super init
         logging.Logger.__init__(self, name)
-        if filename == '':
-            filename = name + '.log'
     
         # create format
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -22,6 +21,12 @@ class LogHandler(logging.Logger):
 
         # set file log output format        
         try:
+            if logDir == '':
+                logDir = os.path.abspath(os.curdir) + '\\Log'
+            if not os.path.exists(logDir):
+                os.makedirs(logDir)
+
+            filename = '%s\\%s.log' % (logDir, name)
             fileHd = logging.FileHandler(filename)
             fileHd.setLevel(logging.INFO)
             fileHd.setFormatter(formatter)

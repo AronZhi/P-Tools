@@ -1,8 +1,9 @@
 from SpiderComponent.Spider import *
+from LogComponent.LogMember import g_main_log
 
 class MySpider(Spider):
     def HandleMsg(self, url, msg: Msg):
-        print(msg.data)
+        g_main_log.info(msg.data)
         return True
 
 

@@ -1,6 +1,7 @@
 import threading
 from NetComponent.NetServer import NetServer
 from NetComponent.NetClient import NetClient
+from LogComponent.LogMember import g_main_log
 
 def test_1():
     server = NetServer(10000)
@@ -15,7 +16,7 @@ def test_2():
     ip = input('input server ip:')
     client = NetClient(ip, 10000)
     client.Connect()
-    print(client.Receive())
+    g_main_log.info(client.Receive())
     client.Send('hello')
     client.Disconnect()
 

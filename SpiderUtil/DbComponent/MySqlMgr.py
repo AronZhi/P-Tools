@@ -1,5 +1,5 @@
 import pymysql
-from DbComponent.Singleton import *
+from Decorator.Singleton import *
 
 
 class DBConnection(object):

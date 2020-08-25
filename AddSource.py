@@ -2,19 +2,20 @@ import site
 
 MyPackFile = '\\mypkt.pth'
 
-def AddSourceRoot(rootPath: str)->bool:
+def AddSourceRoot()->bool:
     path = site.getsitepackages()
     if path is None or len(path) < 2:
         return False
     
     global MyPackFile
     packFilePath = path[1] + MyPackFile
+    rootPath = input('Please input root path:')
     try:
         with open(packFilePath, 'r+') as packFile:
-            text = packFile.read()
-            if text.find(rootPath) >= 0:
-                print('path already exist')
-                return True
+            for line in packFile.readlines():
+                if line == rootPath:
+                    print('path already exist')
+                    return True
 
             packFile.write('\n')
             packFile.write(rootPath)
@@ -28,10 +29,28 @@ def AddSourceRoot(rootPath: str)->bool:
     return True
 
 
+def ViewMyPacket():
+    path = site.getsitepackages()
+    if path is None or len(path) < 2:
+        return
+    
+    global MyPackFile
+    packFilePath = path[1] + MyPackFile
+
+    with open(packFilePath, 'r') as packFile:
+            text = packFile.read()
+            print(text)
+
+
 def main():
-    rootPath = input('Please input root path:')
-    ret = AddSourceRoot(rootPath)
-    print(ret)
+    while True:
+        commond = input('add source packet input 1, view packet input 2, input other exit.  ')
+        if commond == '1':
+            AddSourceRoot()
+        elif commond == '2':
+            ViewMyPacket()
+        else:
+            break
 
 if __name__ == '__main__':
     main()

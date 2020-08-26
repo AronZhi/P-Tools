@@ -1,20 +1,29 @@
-from xmlrpc import SimpleXMLRPCServer
+from xmlrpc.server import SimpleXMLRPCServer
 import socket
-from SpiderComponent.Spider import Spider
+import threading
+from SpiderComponent.Spider import *
 from LogComponent.LogMember import *
 
-class SpiderServer(object):
+class SpiderServer(threading.Thread):
     def __init__(self, port = 10000):
+        threading.Thread.__init__(self)
         self.port = port
-
-    def _getLocalIP(self):
         hostname = socket.gethostname()
-        localIP = socket.gethostbyname(hostname)
-        return localIP
+        self.localIP = socket.gethostbyname(hostname)
+        self.server: SimpleXMLRPCServer = None
 
-    def Work(self, spider: Spider):
-        localIP = self._getLocalIP()
-        server = SimpleXMLRPCServer.SimpleXMLRPCServer((localIP, self.port))
-        server.register_instance(spider)
-        g_main_log.info('start listen %s:%d' % (localIP, self.port)
-        self.server.serve_forever()
+
+    def Init(self, worker: Spider):
+        self.server = SimpleXMLRPCServer((self.localIP, self.port))
+        self.server.register_instance(worker)
+    
+
+    def StopServer(self):
+        if self.server:
+            g_main_log.info('stop server')
+            self.server.shutdown()
+
+
+    def run(self):
+        g_main_log.info('start listen %s:%d' % (self.localIP, self.port))
+        self.server.serve_forever()    

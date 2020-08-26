@@ -1,17 +1,23 @@
 import multiprocessing
 import requests
 import time
+import xmlrpc.client
 from MsgComponent.MsgType import msg_type
 from MsgComponent.Msg import Msg
 from SpiderComponent.SpiderParam import SpiderParam
+from LogComponent.LogMember import g_main_log
 
 
 class Spider(object):
     def __init__(self):
         self.param = SpiderParam()
+        self.partners = dict()
 
     
     def HandleMsg(self, url, msg: Msg):
+        """
+        web page parse function
+        """
         return True
 
 
@@ -36,7 +42,20 @@ class Spider(object):
         
         return ret
 
-
-    def Crawl(self, url: str)->Msg:
+    
+    def _Crawl(self, url)->bool:
         msg = self._GetHtml(url)
         return self.HandleMsg(url, msg)
+
+
+    def Crawl(self, url: str, partnerIP: str)->bool:
+        if self.partners.get(partnerIP, None):
+            self.partners[partnerIP]._Crawl(url)
+        else:
+            return self._Crawl(url)
+
+    
+    def GetPartner(self, remote: str):
+        g_main_log.info('connect to %s' % remote)
+        partner = xmlrpc.client.ServerProxy('http://%s/' % host, verbose=True)
+        self.partners[remote] = partner

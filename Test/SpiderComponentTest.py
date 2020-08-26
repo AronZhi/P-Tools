@@ -6,7 +6,7 @@ from LogComponent.LogMember import g_main_log
 
 class MySpider(Spider):
     def HandleMsg(self, url, msg: Msg):
-        g_main_log.info(msg.data)
+        g_main_log.info(url)
         return True
 
 
@@ -27,7 +27,8 @@ def Test_Server():
 
 
 def Test_Client():
-    server = xmlrpc.client.ServerProxy('10.224.203.49:10000', verbose=True)
+    host = input('remote address(like 127.0.0.1:8000)    ')
+    server = xmlrpc.client.ServerProxy('http://%s/' % host, verbose=True)
     ret = server.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
     print(ret)
 

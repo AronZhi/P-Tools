@@ -39,4 +39,4 @@ class Spider(object):
 
     def Crawl(self, url: str)->Msg:
         msg = self._GetHtml(url)
-        self.HandleMsg(url, msg)
+        return self.HandleMsg(url, msg)

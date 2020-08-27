@@ -31,7 +31,7 @@ def Test_Server():
 def Test_Client():
     host = input('remote address(like 127.0.0.1:8000)    ')
     spider = Spider()
-    spider.SetPartner(host)
+    spider.SetPartner(remote = host)
     ret = spider.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
     print(ret)
 
@@ -39,7 +39,7 @@ def Test_Client():
 def Test_local():
     spider = Spider()
     handler = MySpiderHandler()
-    spider.SetHandler(handler)
+    spider.SetHandler(local = handler)
     spider.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
 
 

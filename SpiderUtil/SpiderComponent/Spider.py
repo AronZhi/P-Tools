@@ -9,21 +9,20 @@ from LogComponent.LogMember import g_main_log
 
 class Spider(object):
     def __init__(self):
-        self.partner: xmlrpc.client.ServerProxy = None
+        self.remoteHandler: xmlrpc.client.ServerProxy = None
         self.handler: SpiderHandler = None
 
 
     def Crawl(self, url: str)->bool:
-        if self.partner:
-            return self.partner.Crawl(url)
+        if self.remoteHandler:
+            return self.remoteHandler.Crawl(url)
         elif self.handler:
             return self.handler.Crawl(url)
 
     
-    def SetPartner(self, remote: str):
-        g_main_log.info('connect to %s' % remote)
-        self.partner = xmlrpc.client.ServerProxy('http://%s/' % remote)
-
-    
-    def SetHandler(self, handler: SpiderHandler):
-        self.handler = handler
+    def SetHandler(self, **args):
+        if args.get('remote', None):
+            g_main_log.info('connect to %s' % args['remote'])
+            self.remoteHandler = xmlrpc.client.ServerProxy('http://%s/' % args['remote'])
+        elif args.get('local', None):
+            self.handler = args['local']

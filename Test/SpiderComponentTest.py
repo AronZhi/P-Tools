@@ -1,10 +1,12 @@
 import xmlrpc.client
 import threading
-from SpiderComponent.Spider import *
-from SpiderComponent.SpiderServer import *
+from SpiderComponent.Spider import Spider
+from SpiderComponent.SpiderServer import SpiderServer
+from SpiderComponent.SpiderHandler import SpiderHandler
+from MsgComponent.Msg import Msg
 from LogComponent.LogMember import g_main_log
 
-class MySpider(Spider):
+class MySpiderHandler(SpiderHandler):
     def HandleMsg(self, url, msg: Msg):
         g_main_log.info(url)
         return True
@@ -17,8 +19,8 @@ def CommondHandler(server: SpiderServer):
 
 def Test_Server():
     server = SpiderServer()
-    spider = MySpider()
-    server.Init(spider)
+    myHandler = MySpiderHandler()
+    server.Init(myHandler)
     commondThread = threading.Thread(target = CommondHandler, args={server,})
     server.start()
     commondThread.start()
@@ -28,15 +30,24 @@ def Test_Server():
 
 def Test_Client():
     host = input('remote address(like 127.0.0.1:8000)    ')
-    server = xmlrpc.client.ServerProxy('http://%s/' % host, verbose=True)
-    ret = server.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
+    spider = Spider()
+    spider.SetPartner(host)
+    ret = spider.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
     print(ret)
 
 
 def Test_local():
-    spider = MySpider()
+    spider = Spider()
+    handler = MySpiderHandler()
+    spider.SetHandler(handler)
     spider.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
 
 
 if __name__ == '__main__':
-    Test_Client()
+    choice = input('client input 1, server input 2, local input other:   ')
+    if choice == '1':
+        Test_Client()
+    elif choice == '2':
+        Test_Server()
+    else:
+        Test_local()

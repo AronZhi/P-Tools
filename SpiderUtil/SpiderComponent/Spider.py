@@ -25,5 +25,5 @@ class Spider(object):
         self.partner = xmlrpc.client.ServerProxy('http://%s/' % remote)
 
     
-    def SetHandler(self, handler: : SpiderHandler):
+    def SetHandler(self, handler: SpiderHandler):
         self.handler = handler

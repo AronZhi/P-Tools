@@ -4,7 +4,7 @@ import time
 import csv
 import sys
 
-from SpiderComponent.Spider import Spider
+from SpiderComponent.SpiderHandler import SpiderHandler
 from MsgComponent.MsgType import msg_type
 from MsgComponent.Msg import Msg
 
@@ -22,20 +22,19 @@ class RentInfo(object):
         return '%s, %s, %s, %d, %d' % (self.downtown, self.street, self.community, self.rent, self.area)
 
 
-class LianjiaSpider(Spider):
+class LianjiaSpiderHandler(SpiderHandler):
     def __init__(self):
-        Spider.__init__(self)
-        self.rentMap = []
+        SpiderHandler.__init__(self)
 
 
-    def SaveData(self):
-        if len(self.rentMap) == 0:
+    def SaveData(self, rentInfoList):
+        if len(rentInfoList) == 0:
             return
 
-        with open('data.csv', 'w', encoding='utf8') as csvfile:
+        with open('data.csv', 'a+', encoding='utf8') as csvfile:
             csv_writer = csv.writer(csvfile, lineterminator='\n')
-            csv_writer.writerow(['downtown', 'street', 'community', 'rent', 'area'])
-            for rentInfo in self.rentMap:
+            #csv_writer.writerow(['downtown', 'street', 'community', 'rent', 'area'])
+            for rentInfo in rentInfoList:
                 csv_writer.writerow([rentInfo.downtown, rentInfo.street, rentInfo.community, str(rentInfo.rent), str(rentInfo.area)])
 
 
@@ -52,31 +51,28 @@ class LianjiaSpider(Spider):
             text = re.findall('(\d{1,}㎡)', detail)
             areaStr = text[0][0:-1]
             rentInfo.area = int(areaStr)
-            self.rentMap.append(rentInfo)
+            return rentInfo
+        return None
 
 
     def HandleHtml(self, html):
         soup = BeautifulSoup(html, features='html.parser')
         houseList = soup.find(class_ = 'content__list').find_all(class_ = 'content__list--item--main')
+        rentInfoList = list()
         for houseInfo in houseList:
-            self.ParseInfo(houseInfo)
+            rentInfo = self.ParseInfo(houseInfo)
+            if rentInfo:
+                rentInfoList.append(rentInfo)
+        return rentInfoList
 
 
     def HandleMsg(self, url, msg: Msg):
         if msg.type == msg_type.success:
-            self.HandleHtml(msg.data)
+            rentInfoList = self.HandleHtml(msg.data)
+            self.SaveData(rentInfoList)
             return True
         else:
             print(msg.data)
         return False
 
-
-    def Start(self):
-        for index in range(1,100):
-            url = 'https://hz.lianjia.com/zufang/pg%drco11/#contentList' % index
-            if index == 1:
-                url = 'https://hz.lianjia.com/zufang/rco11/#contentList'
-            self.Crawl(url)
-            time.sleep(3)
-        self.SaveData()
         

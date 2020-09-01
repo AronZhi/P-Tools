@@ -4,7 +4,7 @@ import time
 import csv
 import sys
 
-from SpiderComponent.SpiderHandler import SpiderHandler
+from SpiderComponent.PageHandler import PageHandler
 from MsgComponent.MsgType import msg_type
 from MsgComponent.Msg import Msg
 
@@ -22,9 +22,9 @@ class RentInfo(object):
         return '%s, %s, %s, %d, %d' % (self.downtown, self.street, self.community, self.rent, self.area)
 
 
-class LianjiaSpiderHandler(SpiderHandler):
+class LianjiaHandler(PageHandler):
     def __init__(self):
-        SpiderHandler.__init__(self)
+        PageHandler.__init__(self)
 
 
     def SaveData(self, rentInfoList):
@@ -55,24 +55,15 @@ class LianjiaSpiderHandler(SpiderHandler):
         return None
 
 
-    def HandleHtml(self, html):
-        soup = BeautifulSoup(html, features='html.parser')
+    def HandlePage(self, page):
+        soup = BeautifulSoup(page, features='html.parser')
         houseList = soup.find(class_ = 'content__list').find_all(class_ = 'content__list--item--main')
         rentInfoList = list()
         for houseInfo in houseList:
             rentInfo = self.ParseInfo(houseInfo)
             if rentInfo:
                 rentInfoList.append(rentInfo)
-        return rentInfoList
-
-
-    def HandleMsg(self, url, msg: Msg):
-        if msg.type == msg_type.success:
-            rentInfoList = self.HandleHtml(msg.data)
-            self.SaveData(rentInfoList)
-            return True
-        else:
-            print(msg.data)
-        return False
+        self.SaveData(rentInfoList)
+        return True
 
         

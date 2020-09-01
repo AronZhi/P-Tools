@@ -4,9 +4,9 @@ from LogComponent.LogMember import g_main_log
 
 
 def main()->int:
-    lianjiaHandler = LianjiaSpiderHandler()
+    lianjiaHandler = LianjiaHandler()
     spider = Spider()
-    spider.SetHandler(local = lianjiaHandler)
+    spider.SetCtrl(page_handler = lianjiaHandler)
 
     for index in range(1,100):
         url = 'https://hz.lianjia.com/zufang/pg%drco11/#contentList' % index

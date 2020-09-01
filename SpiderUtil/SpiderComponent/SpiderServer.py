@@ -1,7 +1,7 @@
 from xmlrpc.server import SimpleXMLRPCServer
 import socket
 import threading
-from SpiderComponent.SpiderHandler import SpiderHandler
+from SpiderComponent.Spider import SpiderCtrl
 from LogComponent.LogMember import *
 
 class SpiderServer(threading.Thread):
@@ -13,9 +13,10 @@ class SpiderServer(threading.Thread):
         self.server: SimpleXMLRPCServer = None
 
 
-    def Init(self, worker: SpiderHandler):
-        self.server = SimpleXMLRPCServer((self.localIP, self.port))
-        self.server.register_instance(worker)
+    def SetServerWorker(self, worker: SpiderCtrl):
+        if worker:
+            self.server = SimpleXMLRPCServer((self.localIP, self.port))
+            self.server.register_instance(worker)
     
 
     def StopServer(self):

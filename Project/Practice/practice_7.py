@@ -34,7 +34,8 @@ def test_3():
     print(df)
 
     df2 = pandas.read_csv('C:\\WorkSpace\\Test\\Spider\\data.csv', nrows=5)
+    
     print(df2)
 
 if __name__ == '__main__':
-    test_1()
+    test_3()

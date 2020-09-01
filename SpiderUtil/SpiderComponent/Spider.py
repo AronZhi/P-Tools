@@ -3,26 +3,43 @@ spider interface
 """
 
 import xmlrpc.client
-from SpiderComponent.SpiderHandler import SpiderHandler
+from SpiderComponent.PageCrawler import PageCrawler
+from SpiderComponent.PageHandler import PageHandler
 from LogComponent.LogMember import g_main_log
+
+
+class SpiderCtrl(object):
+    def __init__(self, handler: PageHandler, crawler: PageCrawler = None):
+        self.handler = handler
+        if crawler:
+            self.crawler = crawler
+        else:
+            self.crawler = PageCrawler()
+
+    
+    def Crawl(self, url):
+        page = self.crawler.FetchPage(url)
+        return self.handler.HandlePage(page)
 
 
 class Spider(object):
     def __init__(self):
-        self.remoteHandler: xmlrpc.client.ServerProxy = None
-        self.handler: SpiderHandler = None
+        self.remoteCtrl: xmlrpc.client.ServerProxy = None
+        self.localCtrl: SpiderCtrl = None
 
 
     def Crawl(self, url: str)->bool:
-        if self.remoteHandler:
-            return self.remoteHandler.Crawl(url)
-        elif self.handler:
-            return self.handler.Crawl(url)
+        if self.remoteCtrl:
+            return self.remoteCtrl.Crawl(url)
+        elif self.localCtrl:
+            return self.localCtrl.Crawl(url)
 
     
-    def SetHandler(self, **args):
+    def SetCtrl(self, **args):
         if args.get('remote', None):
             g_main_log.info('connect to %s' % args['remote'])
-            self.remoteHandler = xmlrpc.client.ServerProxy('http://%s/' % args['remote'])
+            self.remoteCtrl = xmlrpc.client.ServerProxy('http://%s/' % args['remote'])
         elif args.get('local', None):
-            self.handler = args['local']
+            self.localCtrl = args['local']
+        elif args.get('page_handler', None):
+            self.localCtrl = SpiderCtrl(args['page_handler'])

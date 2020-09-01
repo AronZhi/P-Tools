@@ -2,13 +2,13 @@ import xmlrpc.client
 import threading
 from SpiderComponent.Spider import Spider
 from SpiderComponent.SpiderServer import SpiderServer
-from SpiderComponent.SpiderHandler import SpiderHandler
+from SpiderComponent.PageHandler import PageHandler
 from MsgComponent.Msg import Msg
 from LogComponent.LogMember import g_main_log
 
-class MySpiderHandler(SpiderHandler):
-    def HandleMsg(self, url, msg: Msg):
-        g_main_log.info(url)
+class MySpiderHandler(PageHandler):
+    def HandlePage(self, page):
+        g_main_log.info(page)
         return True
 
 
@@ -20,7 +20,7 @@ def CommondHandler(server: SpiderServer):
 def Test_Server():
     server = SpiderServer()
     myHandler = MySpiderHandler()
-    server.Init(myHandler)
+    server.SetServerWorker(myHandler)
     commondThread = threading.Thread(target = CommondHandler, args={server,})
     server.start()
     commondThread.start()
@@ -39,7 +39,7 @@ def Test_Client():
 def Test_local():
     spider = Spider()
     handler = MySpiderHandler()
-    spider.SetHandler(local = handler)
+    spider.SetCtrl(page_handler = handler)
     spider.Crawl('https://www.runoob.com/python3/python3-file-methods.html')
 
 

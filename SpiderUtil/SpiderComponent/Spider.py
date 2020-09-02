@@ -29,6 +29,7 @@ class Spider(object):
 
 
     def Crawl(self, url: str)->bool:
+        g_main_log.info('start crawl url:%s' % url)
         if self.remoteCtrl:
             return self.remoteCtrl.Crawl(url)
         elif self.localCtrl:

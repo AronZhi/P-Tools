@@ -19,7 +19,9 @@ class SpiderCtrl(object):
     
     def Crawl(self, url):
         page = self.crawler.FetchPage(url)
-        return self.handler.HandlePage(page)
+        if page and page != '':
+            return self.handler.HandlePage(page)
+        return False
 
 
 class Spider(object):

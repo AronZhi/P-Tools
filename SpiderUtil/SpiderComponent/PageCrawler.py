@@ -1,6 +1,6 @@
 import requests
 import sys
-
+from LogComponent.LogMember import g_main_log
 
 user_agent = {'windows': 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko',
     'mac': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) ' \

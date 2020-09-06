@@ -43,7 +43,13 @@ def test_3():
     df2 = pandas.read_csv('C:\\WorkSpace\\Test\\Spider\\data.csv', nrows=5)
     print(df2)
 
+
 def test_4():
+    df = pandas.read_csv('C:\\WorkSpace\\Test\\Spider\\data.csv', nrows=20, names = ['downtown', 'street', 'community', 'rent', 'area'])
+    print(df)
+    print(df2)
+
+def test_5():
     CnShwoProblemFix()
     df = pandas.read_csv('C:\\WorkSpace\\Test\\Spider\\data.csv', nrows=20, names = ['downtown', 'street', 'community', 'rent', 'area'])
     #df.plot(x='downtown', y='rent')

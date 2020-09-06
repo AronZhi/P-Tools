@@ -2,13 +2,13 @@ import pymysql
 from Decorator.Singleton import *
 
 
-class DBConnection(object):
-    def __init__(self, username = '', password = '', host = '', db = ''):
+class MySqlConnection(object):
+    def __init__(self, username, password, host, db):
         self.username = username
         self.password = password
         self.host = host
         self.db = db
-        self.connection = None
+        self.connection = pymysql.connect(host=host, user=username, passwd=password, db=db)
 
 
     def __del__(self):
@@ -40,40 +40,31 @@ class DBConnection(object):
             cur.execute(sql)
             cur.close()
 
+    
+    def Close(self):
+        if self.connection:
+            self.connection.close()
+            self.connection = None
+
 
 @singleton
 class MySqlMgr(object):
     def __init__(self):
-        self.DBmap = {}
+        self.DBmap = dict()
 
     
     def __del__(self):
         for db in self.DBmap:
-            if self.DBmap[db].connection:
-                self.DBmap[db].connection.close()
-                self.DBmap[db].connection = None
+            self.DBmap[db].Close()
 
 
-    def SetDBConnectInfo(self, db, username, password, host):
-        dbConnInfo = DBConnection(username, password, host, db)
-        self.DBmap[db] = dbConnInfo
-
-
-    def Connect(self, db):
-        dbConnInfo = self.DBmap.get(db, None)
-        if dbConnInfo is None:
-            return False
-        
-        if dbConnInfo.connection:
-            return False
-        
-        dbConnInfo.connection = pymysql.connect(host=dbConnInfo.host, user=dbConnInfo.username, passwd=dbConnInfo.password, db=db)
-        return True
+    def GenerateDB(self, db, username, password, host):
+        if self.DBmap.get(db, None) is None:
+            self.DBmap[db] = MySqlConnection(username, password, host, db)
     
 
-    def GetDB(self, db):
-        dbConnInfo = self.DBmap.get(db, None)
-        return dbConnInfo
+    def GetDB(self, db)->MySqlConnection:
+        return self.DBmap.get(db, None)
 
 
 g_mysql_mgr = MySqlMgr()

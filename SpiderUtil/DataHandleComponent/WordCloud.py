@@ -5,20 +5,23 @@ import jieba
 import matplotlib
 import os
 
-class WordCloudAssistant(object):
+class WordCloud(object):
     def __init__(self):
         self.fontPath = 'C:\\Windows\\Fonts\\simsun.ttc'
         self.output = os.getcwd() + '\\output.png'
         self.backgroundColor = 'white'
 
-    
-    def SetParam(self, font: str = '', backgroundColor: str = '', output: str = ''):
-        self.fontPath = font
-        self.backgroundColor = backgroundColor
-        self.output = output
+
+    def SetParam(self, **args):
+        if args.get('fontPath', None):
+            self.fontPath = args['font']
+        if args.get('backgroundColor', None):
+            self.backgroundColor = args['backgroundColor']
+        if args.get('output', None):
+            self.output = args['output']
 
 
-    def TransCn(self, text):
+    def __TransCn(self, text):
         wordLst = jieba.cut(text)
         res = ' '.join(wordLst)
         return res
@@ -28,7 +31,7 @@ class WordCloudAssistant(object):
         isSave: bool = False):
         
         if isChines:
-            text = self.TransCn(text)
+            text = self.__TransCn(text)
 
         arags = {}
         arags['font_path'] = self.fontPath
@@ -48,3 +51,4 @@ class WordCloudAssistant(object):
         image_produce.show()
         if isSave:
             cloud.to_file(self.output)
+

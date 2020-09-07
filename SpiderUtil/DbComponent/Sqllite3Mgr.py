@@ -17,6 +17,7 @@ class Sqllite3Connection(object):
 
     def Execute(self, sql):
         self.connection.execute(sql)
+        self.connection.commit()
 
     
     def Close(self):

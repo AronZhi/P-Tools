@@ -1,5 +1,5 @@
 from DbComponent.MySqlMgr import *
-from DbComponent.Sqllite3Mgr import *
+from DbComponent.sqlite3Mgr import *
 from LogComponent.LogMember import g_main_log
 
 def test_1():
@@ -10,8 +10,8 @@ def test_1():
 
 
 def test_2():
-    g_sqllite_mgr.GenerateDB('rent.db')
-    db = g_sqllite_mgr.GetDB('rent.db')
+    g_sqlite_mgr.GenerateDB('rent.db')
+    db = g_sqlite_mgr.GetDB('rent.db')
     #db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 1550, 16)')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')

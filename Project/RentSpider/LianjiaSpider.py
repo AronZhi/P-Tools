@@ -5,7 +5,7 @@ import csv
 import sys
 
 from SpiderComponent.PageHandler import PageHandler
-from DbComponent.Sqllite3Mgr import g_sqllite_mgr
+from DbComponent.sqlite3Mgr import g_sqlite_mgr
 
 
 class RentInfo(object):
@@ -27,7 +27,7 @@ class LianjiaHandler(PageHandler):
 
 
     def InitDB(self):
-        db = g_sqllite_mgr.GenerateDB('rent.db')
+        db = g_sqlite_mgr.GenerateDB('rent.db')
         db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
 
     def SaveData(self, rentInfoList):
@@ -40,7 +40,7 @@ class LianjiaHandler(PageHandler):
             for rentInfo in rentInfoList:
                 csv_writer.writerow([rentInfo.downtown, rentInfo.street, rentInfo.community, str(rentInfo.rent), str(rentInfo.area)])
         """
-        db = g_sqllite_mgr.GetDB('rent.db')
+        db = g_sqlite_mgr.GetDB('rent.db')
         for rentInfo in rentInfoList:
             sql = 'INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'%s\', \'%s\', \'%s\', %d, %d)' % (rentInfo.downtown, rentInfo.street, rentInfo.community, rentInfo.rent, rentInfo.area)
             db.Execute(sql)

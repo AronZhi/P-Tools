@@ -1,7 +1,7 @@
 import sqlite3
 from Decorator.Singleton import singleton
 
-class Sqllite3Connection(object):
+class sqlite3Connection(object):
     def __init__(self, db):
         self.filename = db
         self.connection = sqlite3.connect(db)
@@ -41,12 +41,12 @@ class Sqlliet3Mgr(object):
 
     def GenerateDB(self, db):
         if self.DBMap.get(db, None) is None:
-            self.DBMap[db] = Sqllite3Connection(db)
+            self.DBMap[db] = sqlite3Connection(db)
         return self.DBMap[db]
 
     
-    def GetDB(self, db)->Sqllite3Connection:
+    def GetDB(self, db)->sqlite3Connection:
         return self.DBMap.get(db, None)
 
 
-g_sqllite_mgr = Sqlliet3Mgr()
+g_sqlite_mgr = Sqlliet3Mgr()

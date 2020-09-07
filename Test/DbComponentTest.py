@@ -1,5 +1,5 @@
 from DbComponent.MySqlMgr import *
-from DbComponent.sqlite3Mgr import *
+from DbComponent.Sqlite3Mgr import *
 from LogComponent.LogMember import g_main_log
 
 def test_1():

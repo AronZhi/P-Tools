@@ -61,6 +61,7 @@ class MySqlMgr(object):
     def GenerateDB(self, db, username, password, host):
         if self.DBmap.get(db, None) is None:
             self.DBmap[db] = MySqlConnection(username, password, host, db)
+        return self.DBmap[db]
     
 
     def GetDB(self, db)->MySqlConnection:

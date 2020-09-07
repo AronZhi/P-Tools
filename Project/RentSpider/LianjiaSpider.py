@@ -5,8 +5,7 @@ import csv
 import sys
 
 from SpiderComponent.PageHandler import PageHandler
-from MsgComponent.MsgType import msg_type
-from MsgComponent.Msg import Msg
+from DbComponent.Sqllite3Mgr import g_sqllite_mgr
 
 
 class RentInfo(object):
@@ -27,15 +26,25 @@ class LianjiaHandler(PageHandler):
         PageHandler.__init__(self)
 
 
+    def InitDB(self):
+        db = g_sqllite_mgr.GenerateDB('rent.db')
+        db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
+
     def SaveData(self, rentInfoList):
         if len(rentInfoList) == 0:
             return
-
+        """
         with open('data.csv', 'a+', encoding='utf8') as csvfile:
             csv_writer = csv.writer(csvfile, lineterminator='\n')
             #csv_writer.writerow(['downtown', 'street', 'community', 'rent', 'area'])
             for rentInfo in rentInfoList:
                 csv_writer.writerow([rentInfo.downtown, rentInfo.street, rentInfo.community, str(rentInfo.rent), str(rentInfo.area)])
+        """
+        db = g_sqllite_mgr.GetDB('rent.db')
+        for rentInfo in rentInfoList:
+            sql = 'INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'%s\', \'%s\', \'%s\', %d, %d)' % (rentInfo.downtown, rentInfo.street, rentInfo.community, rentInfo.rent, rentInfo.area)
+            db.Execute(sql)
+        db.Commit()
 
 
     def ParseInfo(self, houseInfo):

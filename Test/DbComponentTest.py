@@ -15,8 +15,8 @@ def test_2():
     #db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 1550, 16)')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')
-    #data = db.Query('SELECT * FROM RENT')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'余杭\', \'闲林\', \'竹海水韵\', 1200, 20)')
+    #db.Commit()
     data = db.Query('SELECT * FROM RENT')
     for row in data:
         print(row)

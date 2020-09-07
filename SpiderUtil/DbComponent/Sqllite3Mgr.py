@@ -17,6 +17,9 @@ class Sqllite3Connection(object):
 
     def Execute(self, sql):
         self.connection.execute(sql)
+
+
+    def Commit(self):
         self.connection.commit()
 
     
@@ -39,6 +42,7 @@ class Sqlliet3Mgr(object):
     def GenerateDB(self, db):
         if self.DBMap.get(db, None) is None:
             self.DBMap[db] = Sqllite3Connection(db)
+        return self.DBMap[db]
 
     
     def GetDB(self, db)->Sqllite3Connection:

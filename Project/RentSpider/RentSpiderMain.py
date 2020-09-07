@@ -21,6 +21,7 @@ def Work(spider):
 
 def Test1():
     lianjiaHandler = LianjiaHandler()
+    lianjiaHandler.InitDB()
     server = SpiderServer()
     server.SetServerWorker(SpiderCtrl(lianjiaHandler))
     commondThread = threading.Thread(target = CommondHandler, args={server,})
@@ -39,6 +40,7 @@ def Test2():
 
 def Test3():
     lianjiaHandler = LianjiaHandler()
+    lianjiaHandler.InitDB()
     spider = Spider()
     spider.SetCtrl(page_handler = lianjiaHandler)
     Work(spider)
@@ -51,7 +53,7 @@ def main()->int:
     elif c == '2':
         Test2()
     else:
-        Test3
+        Test3()
     return 0 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ def test_2():
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'余杭\', \'闲林\', \'竹海水韵\', 1200, 20)')
     #db.Commit()
-    data = db.Query('SELECT * FROM RENT')
+    data = db.Query('SELECT downtown, SUM(rent)/SUM(area) as aveRent FROM RENT WHERE downtown = \'西湖\'')
     for row in data:
         print(row)
 

@@ -1,6 +1,6 @@
 from DataHandleComponent.WordCloud import *
-from DataHandleComponent.LineChart import *
-
+from DataHandleComponent.Chart import *
+from DbComponent.Sqlite3Mgr import *
 
 def test_1():
     wcAssistant = WordCloud()
@@ -18,11 +18,17 @@ def test_2():
 
 
 def test_3():
-    lineChart = LineChart()
-    sql = 'SELECT * FROM RENT WHERE downtown in (\'西湖\', \'余杭\')'
-    lineChart.SetSqliteData('rent.db', sql)
-    lineChart.SetChineseFont()
-    lineChart.Generate(x_axis = 'downtown',  y_axis = 'rent', show = True)
+    g_sqlite_mgr.GenerateDB('rent.db')
+    conn = g_sqlite_mgr.GetDBConnection('rent.db')
+    chart = Chart()
+    downtowns = ['西湖', '余杭', '萧山', '江干']
+    frame = pandas.DataFrame()
+    for downtown in downtowns:
+        sql = 'SELECT downtown, SUM(rent)/SUM(area) as aveRent FROM RENT WHERE downtown = \'%s\'' % downtown
+        frame = pandas.concat([frame, pandas.read_sql_query(sql, conn)])
+    chart.SetData(frame)
+    chart.SetChineseFont()
+    chart.Generate('downtown', 'aveRent', show = True)
 
 
 if __name__ == '__main__':

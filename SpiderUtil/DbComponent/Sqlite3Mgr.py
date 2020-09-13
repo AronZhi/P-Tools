@@ -48,5 +48,11 @@ class Sqlliet3Mgr(object):
     def GetDB(self, db)->Sqlite3Connection:
         return self.DBMap.get(db, None)
 
+    
+    def GetDBConnection(self, db)->sqlite3.connect:
+        if self.DBMap.get(db, None):
+            return self.DBMap[db].connection
+        return None
+
 
 g_sqlite_mgr = Sqlliet3Mgr()

@@ -67,5 +67,11 @@ class MySqlMgr(object):
     def GetDB(self, db)->MySqlConnection:
         return self.DBmap.get(db, None)
 
+    
+    def GetDBConnection(self, db)->pymysql.connect:
+        if self.DBmap.get(db, None):
+            return self.DBmap[db].connection
+        return None
+
 
 g_mysql_mgr = MySqlMgr()

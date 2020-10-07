@@ -1,14 +1,24 @@
 import site
+import os
 
-MyPackFile = '\\mypkt.pth'
+MyPackFile = 'mypkt.pth'
+
+def GetSitePackFile()->str:
+    path = site.getsitepackages()
+    global MyPackFile
+    if not path:
+        return None
+    elif len(path) == 1:
+        return os.path.join(path[0], MyPackFile)
+    else:
+        return os.path.join(path[1], MyPackFile)
+
 
 def AddSourceRoot()->bool:
-    path = site.getsitepackages()
-    if path is None or len(path) < 2:
+    packFilePath = GetSitePackFile()
+    if not packFilePath:
         return False
     
-    global MyPackFile
-    packFilePath = path[1] + MyPackFile
     rootPath = input('Please input root path:')
     try:
         with open(packFilePath, 'r+') as packFile:
@@ -30,12 +40,9 @@ def AddSourceRoot()->bool:
 
 
 def ViewMyPacket():
-    path = site.getsitepackages()
-    if path is None or len(path) < 2:
-        return
-    
-    global MyPackFile
-    packFilePath = path[1] + MyPackFile
+    packFilePath = GetSitePackFile()
+    if not packFilePath:
+        return False
 
     with open(packFilePath, 'r') as packFile:
             text = packFile.read()

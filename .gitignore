@@ -1,4 +1,5 @@
 */__pycache__/
-Test/__pycache__/
+__pycache__/
 .idea/
-Log/*
+*/Log/
+/Log/

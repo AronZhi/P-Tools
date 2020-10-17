@@ -1,4 +1,4 @@
-from UtilAssistant import *
+from Test.TestCommon import *
 from DbComponent.MySqlMgr import *
 from DbComponent.Sqlite3Mgr import *
 from LogComponent.LogMember import g_main_log

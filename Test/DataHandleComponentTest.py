@@ -1,3 +1,4 @@
+from Test.TestCommon import *
 from DataHandleComponent.WordCloud import *
 from DataHandleComponent.Chart import *
 from DbComponent.Sqlite3Mgr import *
@@ -35,4 +36,4 @@ def test_3():
 if __name__ == '__main__':
     #test_1()
     #test_2()
-    #test_3()
+    test_3()

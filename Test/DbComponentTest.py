@@ -1,3 +1,4 @@
+from UtilAssistant import *
 from DbComponent.MySqlMgr import *
 from DbComponent.Sqlite3Mgr import *
 from LogComponent.LogMember import g_main_log
@@ -10,8 +11,9 @@ def test_1():
 
 
 def test_2():
-    g_sqlite_mgr.GenerateDB('rent.db')
-    db = g_sqlite_mgr.GetDB('rent.db')
+    dbFile = GetFileRoot(__file__) + '/Resource/rent.db'
+    g_sqlite_mgr.GenerateDB(dbFile)
+    db = g_sqlite_mgr.GetDB(dbFile)
     #db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 1550, 16)')
     #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')

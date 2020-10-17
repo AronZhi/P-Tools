@@ -11,14 +11,16 @@ def test_1():
 
 def test_2():
     lineChart = LineChart()
-    lineChart.SetCsvData(os.getcwd() + '\\data.csv', colum = ['downtown', 'street', 'community', 'rent', 'area'])
+    csvFile = GetFileRoot(__file__) + '/Resource/data.csv'
+    lineChart.SetCsvData(csvFile, colum = ['downtown', 'street', 'community', 'rent', 'area'])
     lineChart.SetChineseFont()
     lineChart.Generate(x_axis = 'downtown',  y_axis = 'rent', show = True)
 
 
 def test_3():
-    g_sqlite_mgr.GenerateDB('rent.db')
-    conn = g_sqlite_mgr.GetDBConnection('rent.db')
+    dbFile = GetFileRoot(__file__) + '/Resource/rent.db'
+    g_sqlite_mgr.GenerateDB(dbFile)
+    conn = g_sqlite_mgr.GetDBConnection(dbFile)
     chart = Chart()
     downtowns = ['西湖', '余杭', '萧山', '江干', '滨江']
     frame = pandas.DataFrame()
@@ -33,5 +35,4 @@ def test_3():
 if __name__ == '__main__':
     #test_1()
     #test_2()
-    test_3()
-        
+    #test_3()

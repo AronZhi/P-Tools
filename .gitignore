@@ -1,5 +1,4 @@
-SpiderUtil/*/__pycache__/
-Project/*/__pycache__/
+*/__pycache__/
 Test/__pycache__/
 .idea/
 Log/*

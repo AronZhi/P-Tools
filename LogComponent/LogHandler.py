@@ -21,12 +21,12 @@ class LogHandler(logging.Logger):
 
         # set file log output format        
         try:
-            if logDir == '':
-                logDir = os.path.abspath(os.curdir) + '\\Log'
-            if not os.path.exists(logDir):
-                os.makedirs(logDir)
-
-            filename = '%s\\%s.log' % (logDir, name)
+            if not os.path.exists(logDir) or logDir == '':
+                logDir = os.path.join(os.getcwd(), 'Log')
+                if not os.path.exists(logDir):
+                    os.makedirs(logDir)
+                    
+            filename = os.path.join(logDir, '%s.log' % name)
             fileHd = logging.FileHandler(filename)
             fileHd.setLevel(logging.INFO)
             fileHd.setFormatter(formatter)

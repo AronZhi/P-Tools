@@ -1,28 +1,26 @@
 from Test.TestCommon import *
-from DbComponent.MySqlMgr import *
-from DbComponent.Sqlite3Mgr import *
-from LogComponent.LogMember import g_main_log
+from DbComponent.DBManager import *
+
+manager = DBManager()
 
 def test_1():
-    g_mysql_mgr.GenerateDB('test_db', 'admin', 'P@ssword123', '10.224.84.59')
-    db = g_mysql_mgr.GetDB('test_db')
+    manager.AddMySql('test_db', 'admin', 'P@ssword123', '10.224.84.59')
+    db = manager.GetMysql('test_db')
     res = db.Query('select * from test_db.user')
-    g_main_log.info(res)
-
+    print(res)
 
 def test_2():
     dbFile = GetFileRoot(__file__) + '/Resource/rent.db'
-    g_sqlite_mgr.GenerateDB(dbFile)
-    db = g_sqlite_mgr.GetDB(dbFile)
-    #db.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
-    #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 1550, 16)')
-    #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')
-    #db.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'余杭\', \'闲林\', \'竹海水韵\', 1200, 20)')
-    #db.Commit()
-    data = db.Query('SELECT downtown, SUM(rent)/SUM(area) as aveRent FROM RENT WHERE downtown = \'西湖\'')
+    print(dbFile)
+    manager.AddSqlite3(dbFile)
+    conn = manager.GetSqlite3(dbFile)
+    data = conn.Query('SELECT downtown, SUM(rent)/SUM(area) as aveRent FROM RENT WHERE downtown = \'西湖\'')
+    #conn.Execute('CREATE TABLE RENT (downtown TEXT, street TEXT, community TEXT,rent INTEGER,area INTEGER);')
+    #conn.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 1550, 16)')
+    #conn.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'江干\', \'城东新城\', \'花园府\', 2000, 20)')
+    #conn.Execute('INSERT INTO RENT (downtown, street, community, rent, area) VALUES(\'余杭\', \'闲林\', \'竹海水韵\', 1200, 20)')
     for row in data:
         print(row)
-
 
 if __name__ == '__main__':
     test_2()

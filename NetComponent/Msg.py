@@ -1,0 +1,1 @@
+MsgMaxSize = 8192

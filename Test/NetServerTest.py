@@ -1,11 +1,10 @@
-from NetComponent.ServerNet import *
-from NetComponent.SessionManager import *
-from NetComponent.SessionFactory import *
+from NetComponent.TCP.TcpServer import *
+from NetComponent.TCP.SessionFactory import *
 
 def main():
-    mgr = SessionManager(SesionFactory())
-    server = ServerNet('127.0.0.1', 8888, 5, mgr)
-    asyncore.loop()
+    factory = SessionFactory()
+    server = TcpServer(8888, factory)
+    server.Start()
 
 if __name__ == '__main__':
     main()

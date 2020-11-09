@@ -1,3 +1,4 @@
+import tornado.gen
 from NetComponent.Http.Server import Server
 from NetComponent.Http.Handler import Handler
 
@@ -9,6 +10,7 @@ class MyHandler(Handler):
             self.write('stop srver now')
             self.StopServer()
         else:
+            tornado.gen.sleep(2)
             self.write('can not handle this command')
     
     async def post(self):
@@ -16,6 +18,7 @@ class MyHandler(Handler):
         print(data)
         if data.get('echo', ''):
             content = data['echo']
+            tornado.gen.sleep(5)
             self.write(content)
 
 

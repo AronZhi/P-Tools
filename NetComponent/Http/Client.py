@@ -15,7 +15,7 @@ class Client(object):
         print(html)
         return False
     
-    def OnAsyncResponse(self, task: asyncio.Task):
+    def _OnAsyncResponse(self, task: asyncio.Task):
         html = task.result()
         return self.HandleHtml(html)
     
@@ -39,7 +39,7 @@ class Client(object):
         loop = asyncio.get_running_loop()
         for request in self.asyncRequests:
             task = loop.create_task(self._Task(request))
-            task.add_done_callback(self.OnAsyncResponse)
+            task.add_done_callback(self._OnAsyncResponse)
             await task
     
     def AddAsyncRequest(self, urlRequest: UrlRequest):

@@ -1,21 +1,30 @@
 import asyncio
 import requests
+from .UrlRequest import *
 
 class Client(object):
     def __init__(self):
         self.session = requests.Session()
+        self.asyncRequests = list()
     
     def updateSession(self, **kwargs):
         if kwargs.get('headers', None):
             self.session.headers.update(kwargs['headers'])
     
-    def OnResponse(self, task: asyncio.Task):
-        html = task.result()
+    def HandleHtml(self, html):
         print(html)
+        return False
     
-    async def _Work(self, workfunc):
+    def OnAsyncResponse(self, task: asyncio.Task):
+        html = task.result()
+        return self.HandleHtml(html)
+    
+    def _HandleRequest(self, urlRequest: UrlRequest):
         try:
-            response = workfunc()
+            if urlRequest.action == UrlAction.Get:
+                response = self.session.get(urlRequest.url)
+            elif urlRequest.action == UrlAction.Post:
+                response = self.session.post(urlRequest.url, data=urlRequest.data)
             if response.status_code == 200:
                 return response.text
             else:
@@ -23,22 +32,35 @@ class Client(object):
         except Exception as e:
             return 'error: %s' % e
     
-    async def _Get(self, url):
-        loop = asyncio.get_running_loop()
-        task = loop.create_task(self._Work(lambda : self.session.get(url)))
-        task.add_done_callback(self.OnResponse)
-        await task
+    async def _Task(self, urlRequest: UrlRequest):
+        return self._HandleRequest(urlRequest)
     
-    async def _Post(self, url, data):
+    async def _main(self):
         loop = asyncio.get_running_loop()
-        task = loop.create_task(self._Work(lambda : self.session.post(url, data=data)))
-        task.add_done_callback(self.OnResponse)
-        await task
-
+        for request in self.asyncRequests:
+            task = loop.create_task(self._Task(request))
+            task.add_done_callback(self.OnAsyncResponse)
+            await task
+    
+    def AddAsyncRequest(self, urlRequest: UrlRequest):
+        self.asyncRequests.append(urlRequest)
+    
+    def AsyncRunRequest(self):
+        asyncio.run(self._main())
+    
     def Get(self, url):
-        asyncio.run(self._Get(url))
+        urlReq = UrlRequest()
+        urlReq.action = UrlAction.Get
+        urlReq.url = url
+        html = self._HandleRequest(urlReq)
+        self.HandleHtml(html)
     
     def Post(self, url, data):
-        asyncio.run(self._Post(url, data))
+        urlReq = UrlRequest()
+        urlReq.action = UrlAction.Post
+        urlReq.url = url
+        urlReq.data = data
+        html = self._HandleRequest(urlReq)
+        self.HandleHtml(html)
 
     

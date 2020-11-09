@@ -1,18 +1,20 @@
 import logging
 from functools import wraps
 
-output = None
+PrintTool = None
 
-def outPutSoruce(writer:logging.Logger = None):
-    output = writer
+def SetPrintTool(writer:logging.Logger = None):
+    global PrintTool
+    PrintTool = writer
 
 def Printf(text):
-    if output:
-        output.info(text)
+    global PrintTool
+    if PrintTool:
+        PrintTool.info(text)
     else:
         print(text)
 
-def logit(func):
+def LogInterface(func):
     @wraps(func)
     def with_logging(*args, **kwargs):
         Printf(func.__name__ + ' start')

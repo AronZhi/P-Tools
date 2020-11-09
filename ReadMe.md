@@ -1,20 +1,25 @@
-## Build
+## 环境
+* python3.7以上
 * 需要将Spider加入到python搜索路径
-```
-运行AddSource.py, 输入指定的路径
-```
-
+    ```
+    运行AddSource.py, 输入utilcomponent所在路径
+    ```
 ## DbComponent
-* 数据库操作类，操作MySQL
+* 需要PyMySQL 0.9.3
+* 数据库操作类，操作MySQL, Sqlite3
+  
+## Decorator
+* 一些装饰器函数
+  
+## LogComponent
+* 日志组件
 
-## MsgComponent
-* 消息传输和定义
-
-## SpiderComponent:
-* 爬虫基类， 需要自定义HandleMsg完成网页处理
-
-## WordCloud
-* 词云类，生成词云
+## NetComponet
+* 需要tornado 6.0.4
+* 网络操作相关, http提供了支持异步io的http server和http client
 
 ## Test
 * 测试代码
+  
+## Demo
+* 一个爬虫示例

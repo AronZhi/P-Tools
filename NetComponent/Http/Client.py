@@ -7,7 +7,7 @@ class Client(object):
         self.session = requests.Session()
         self.asyncRequests = list()
     
-    def updateSession(self, **kwargs):
+    def UpdateSession(self, **kwargs):
         if kwargs.get('headers', None):
             self.session.headers.update(kwargs['headers'])
     

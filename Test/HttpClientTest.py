@@ -17,7 +17,7 @@ def post():
 
 def headers():
     client = Client()
-    client.updateSession(headers = {"Content-Type": "application/json"})
+    client.UpdateSession(headers = {"Content-Type": "application/json"})
     msg = '{"client_version" : "40.12.0.159", "conf_id" : "176421468506168610", "cpu" : {"core" : 8, "freq" : "2.112000"}}'
     content = '{"echo": ' + msg + '}'
     client.Post('http://10.224.84.217:8888/', content.encode())

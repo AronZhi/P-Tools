@@ -13,7 +13,7 @@ def test_wordCloud():
 def test_line():
     try:
         conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'Resource/rent.db'))
-        sqlData = conn.execute('SELECT community, rent, area FROM RENT WHERE downtown = \'余杭\'')
+        sqlData = conn.execute('SELECT community, rent, area FROM RENT WHERE downtown = \'余杭\' LIMIT 20')
         data = dict()
         for row in sqlData:
             if not row[0] in data:

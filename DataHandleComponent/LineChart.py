@@ -38,6 +38,7 @@ class LineChart(Chart):
     def Generate(self):
         picture, chart = matplotlib.pyplot.subplots()
         for key in self.data.keys():
+            # 画各个线条
             value = self.data[key]
             chart.plot(value['x'], value['y'], label=key)
         chart.set(xlabel=self.x, ylabel=self.y, title = self.title)

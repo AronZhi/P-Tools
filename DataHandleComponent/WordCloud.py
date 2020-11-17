@@ -9,11 +9,13 @@ from .BaseChart import *
 
 class WordCloud(BaseChart):
     def __init__(self):
+        """
+        HandleData函数传入文本数据
+        """
         BaseChart.__init__(self)
         self.args = dict()
-        self.output = ''
     
-    def HandleData(self, **kwargs):
+    def SetParam(self, **kwargs):
         """
         backgroundColor: 背景颜色,默认白色
         backgroundFile: 背景图片,默认为空
@@ -23,6 +25,7 @@ class WordCloud(BaseChart):
         output: 生成图片的保存路径, 默认当前路径
         show: 是否显示生成的图片
         """
+        BaseChart.SetParam(self)
         self.args['background_color'] = kwargs.get('backgroundColor', 'white')
         if kwargs.get('fontPath', None):
             self.args['font_path'] = kwargs['fontPath']
@@ -34,10 +37,6 @@ class WordCloud(BaseChart):
         if kwargs.get('chinse', False):
             wordLst = jieba.cut(self.data)
             self.data = ' '.join(wordLst)
-        if kwargs.get('save', False):
-            self.save = True
-            self.output = kwargs.get('output', os.path.join(os.getcwd(), 'WordCloud.png'))
-        self.show = kwargs.get('show', True)
     
     def Generate(self):
         cloud = wordcloud.WordCloud(**self.args).generate(self.data)

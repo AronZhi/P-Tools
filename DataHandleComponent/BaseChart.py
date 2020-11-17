@@ -1,24 +1,23 @@
-import json
-import pandas
-import matplotlib
-from pylab import mpl
+import os
 
 class BaseChart(object):
     def __init__(self):
         self.data = None
-        self.frame: pandas.DataFrame = None
-        self.show = False
+        self.show = True
         self.save = False
+        self.output = ''
     
-    def SetData(self, data):
+    def HandleData(self, data):
+        """
+        设置数据
+        """
         self.data = data
     
-    def HandleData(self, **kwargs):
-        self.frame = pandas.DataFrame(self.data)
+    def SetParam(self, **kwargs):
+        self.show = kwargs.get('show', True)
+        self.save = kwargs.get('save', False)
+        if self.save:
+            self.output = kwargs.get('output', os.path.join(os.getcwd(), 'chart.png'))
 
     def Generate(self):
         pass
-
-    def _PyLabChinse(self):
-        mpl.rcParams['font.sans-serif'] = ['FangSong'] # 指定默认字体
-        mpl.rcParams['axes.unicode_minus'] = False # 解决保存图像是负号'-'显示为方块的问题

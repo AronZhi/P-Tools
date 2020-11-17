@@ -5,50 +5,47 @@ import jieba
 import matplotlib
 import os
 
-class WordCloud(object):
+from .BaseChart import *
+
+class WordCloud(BaseChart):
     def __init__(self):
-        self.fontPath = 'C:\\Windows\\Fonts\\simsun.ttc'
-        self.output = os.getcwd() + '\\output.png'
-        self.backgroundColor = 'white'
-
-
-    def SetParam(self, **args):
-        if args.get('fontPath', None):
-            self.fontPath = args['font']
-        if args.get('backgroundColor', None):
-            self.backgroundColor = args['backgroundColor']
-        if args.get('output', None):
-            self.output = args['output']
-
-
-    def __TransCn(self, text):
-        wordLst = jieba.cut(text)
-        res = ' '.join(wordLst)
-        return res
-
-
-    def Generate(self, text: str,  backgroundFile: str = '', isChines: bool = False, 
-        isSave: bool = False):
-        
-        if isChines:
-            text = self.__TransCn(text)
-
-        arags = {}
-        arags['font_path'] = self.fontPath
-        arags['background_color'] = self.backgroundColor
-        if backgroundFile:
-            image = PIL.Image.open(backgroundFile)
-            mask = numpy.array(image)
-            arags['mask'] = mask
-
-        cloud = wordcloud.WordCloud(**arags).generate(text)
-        
-        if backgroundFile:
-            image_color = wordcloud.ImageColorGenerator(arags['mask'])
+        BaseChart.__init__(self)
+        self.args = dict()
+        self.output = ''
+    
+    def HandleData(self, **kwargs):
+        """
+        backgroundColor: 背景颜色,默认白色
+        backgroundFile: 背景图片,默认为空
+        fontPath: 字体路径
+        chinse: 是否是中文，如果是中文，需要设置中文fontPath
+        save: 是否保存生成的图片
+        output: 生成图片的保存路径, 默认当前路径
+        show: 是否显示生成的图片
+        """
+        self.args['background_color'] = kwargs.get('backgroundColor', 'white')
+        if kwargs.get('fontPath', None):
+            self.args['font_path'] = kwargs['fontPath']
+        if kwargs.get('backgroundFile', None):
+            if os.path.exists(kwargs['backgroundFile']):
+                image = PIL.Image.open(kwargs['backgroundFile'])
+                mask = numpy.array(image)
+                self.args['mask'] = mask
+        if kwargs.get('chinse', False):
+            wordLst = jieba.cut(self.data)
+            self.data = ' '.join(wordLst)
+        if kwargs.get('save', False):
+            self.save = True
+            self.output = kwargs.get('output', os.path.join(os.getcwd(), 'WordCloud.png'))
+        self.show = kwargs.get('show', True)
+    
+    def Generate(self):
+        cloud = wordcloud.WordCloud(**self.args).generate(self.data)
+        if 'mask' in self.args:
+            image_color = wordcloud.ImageColorGenerator(self.args['mask'])
             cloud.recolor(color_func = image_color)
-
         image_produce = cloud.to_image()
-        image_produce.show()
-        if isSave:
+        if self.show:
+            image_produce.show()
+        if self.save:
             cloud.to_file(self.output)
-

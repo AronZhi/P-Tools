@@ -1,39 +1,43 @@
-from Test.TestCommon import *
 from DataHandleComponent.WordCloud import *
-from DataHandleComponent.Chart import *
-from DbComponent.Sqlite3Mgr import *
+from DataHandleComponent.LineChart import *
+import sqlite3
 
-def test_1():
-    wcAssistant = WordCloud()
-    with open(os.getcwd() + '\\Resource\\minister.txt', 'r', encoding='utf8') as fp:
-        text = fp.read()
-        wcAssistant.Generate(text = text, backgroundFile = os.getcwd() + '\\Resource\\test1.jpg', isChines = True)
+def test_wordCloud():
+    wordCloud = WordCloud()
+    with open(os.path.join(os.path.dirname(__file__), 'Resource/minister.txt'), 'r', encoding='utf8') as fp:
+        wordCloud.SetData(fp.read())
+        wordCloud.HandleData(chinse = True, fontPath = 'C:\\Windows\\Fonts\\simsun.ttc',
+            backgroundFile = os.path.join(os.path.dirname(__file__), 'Resource/test1.jpg'))
+        wordCloud.Generate()
 
+def GetData():
+    try:
+        conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'Resource/rent.db'))
+        sqlData = conn.execute('SELECT community, rent, area FROM RENT WHERE downtown = \'余杭\'')
+        data = dict()
+        for row in sqlData:
+            if row[0] in data:
+                data[row[0]]['rent'] += row[1]
+                data[row[0]]['area'] += row[2]
+            else:
+                e = dict()
+                e['community'] = row[0]
+                e['rent'] = row[1]
+                e['area'] = row[2]
+                data[row[0]] = e
+        lst = list()
+        for k in data.keys():
+            lst.append(data[k])
+        return lst
+    finally:
+        conn.close()
 
-def test_2():
+def test_line():
+    data = GetData()
     lineChart = LineChart()
-    csvFile = GetFileRoot(__file__) + '/Resource/data.csv'
-    lineChart.SetCsvData(csvFile, colum = ['downtown', 'street', 'community', 'rent', 'area'])
-    lineChart.SetChineseFont()
-    lineChart.Generate(x_axis = 'downtown',  y_axis = 'rent', show = True)
-
-
-def test_3():
-    dbFile = GetFileRoot(__file__) + '/Resource/rent.db'
-    g_sqlite_mgr.GenerateDB(dbFile)
-    conn = g_sqlite_mgr.GetDBConnection(dbFile)
-    chart = Chart()
-    downtowns = ['西湖', '余杭', '萧山', '江干', '滨江']
-    frame = pandas.DataFrame()
-    for downtown in downtowns:
-        sql = 'SELECT downtown, SUM(rent)/SUM(area) as aveRent FROM RENT WHERE downtown = \'%s\'' % downtown
-        frame = pandas.concat([frame, pandas.read_sql_query(sql, conn)])
-    chart.SetData(frame)
-    chart.SetChineseFont()
-    chart.GeneratePie(show = True, title = 'test')
-
+    lineChart.SetData(data)
+    lineChart.HandleData(x_axis = 'community', y_axis = 'area', chinse = True)
+    lineChart.Generate()
 
 if __name__ == '__main__':
-    #test_1()
-    #test_2()
-    test_3()
+    test_line()

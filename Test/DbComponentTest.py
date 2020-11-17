@@ -1,4 +1,3 @@
-from Test.TestCommon import *
 from DbComponent.DBManager import *
 
 manager = DBManager()
@@ -10,7 +9,7 @@ def test_1():
     print(res)
 
 def test_2():
-    dbFile = GetFileRoot(__file__) + '/Resource/rent.db'
+    dbFile = os.path.join(os.path.dirname(__file__), 'Resource/rent.db')
     print(dbFile)
     manager.AddSqlite3(dbFile)
     conn = manager.GetSqlite3(dbFile)

@@ -1,6 +1,8 @@
+import json
+import time
 from DataHandleComponent.WordCloud import *
 from DataHandleComponent.LineChart import *
-import sqlite3
+from DataHandleComponent.BarChart import *
 
 def test_wordCloud():
     wordCloud = WordCloud()
@@ -10,25 +12,37 @@ def test_wordCloud():
             backgroundFile = os.path.join(os.path.dirname(__file__), 'Resource/test1.jpg'))
         wordCloud.Generate()
 
+def GetTestData():
+    data = dict()
+    with open(os.path.join(os.path.dirname(__file__), 'Resource/Performance.json'), 'r', encoding='utf8') as fp:
+        jsonData = json.loads(fp.read())
+        performanceData = jsonData['data']
+        data['cpu_usage'] = dict()
+        data['cpu_usage']['x'] = list()
+        data['cpu_usage']['y'] = list()
+        data['mem_usage'] = dict()
+        data['mem_usage']['x'] = list()
+        data['mem_usage']['y'] = list()
+        startTime = 1604569450642
+        for e in performanceData:
+            tm = (e['time_stamp'] - startTime)/6000
+            data['cpu_usage']['x'].append(tm)
+            data['cpu_usage']['y'].append(e['cpu_per_all'])
+            data['mem_usage']['x'].append(tm)
+            data['mem_usage']['y'].append(e['mem_usage']/(1024*1024))
+    return data
+
 def test_line():
-    try:
-        conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'Resource/rent.db'))
-        sqlData = conn.execute('SELECT community, rent, area FROM RENT WHERE downtown = \'余杭\' LIMIT 20')
-        data = dict()
-        for row in sqlData:
-            if not row[0] in data:
-                e = dict()
-                e['x'] = list()
-                e['y'] = list()
-                data[row[0]] = e
-            data[row[0]]['x'].append(row[1])
-            data[row[0]]['y'].append(row[2])
-        lineChart = LineChart()
-        lineChart.HandleData(data)
-        lineChart.SetParam(x_axis = 'rent', y_axis = 'area', chinse = True)
-        lineChart.Generate()
-    finally:
-        conn.close()
+    line = LineChart()
+    line.HandleData(GetTestData())
+    line.SetParam(x_axis = 'Time(min)', y_axis = 'value')
+    line.Generate()
+
+def test_bar():
+    bar = BarChart()
+    bar.HandleData(GetTestData())
+    bar.SetParam(x_axis = 'Time(min)', y_axis = 'value')
+    bar.Generate()
 
 if __name__ == '__main__':
-    test_line()
+    test_bar()

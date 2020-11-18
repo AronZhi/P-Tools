@@ -3,6 +3,15 @@ from .Chart import *
 
 class BarChart(RectangularCoordinateChart):
     def __init__(self):
+        """
+        HandleData中传入map数据,格式如下:
+          {
+              x:[]
+              名称1:[]
+              名称2:[]
+              ...
+          }
+        """
         RectangularCoordinateChart.__init__(self)
         self.barWidth = 0.3
         self.showBarValue = False
@@ -29,15 +38,15 @@ class BarChart(RectangularCoordinateChart):
     
     def Generate(self):
         picture, chart = matplotlib.pyplot.subplots()
-        count = len(self.data)
+        count = len(self.data) - 1
         index = 0
         if count > 1:
             index = 0 - int(count/2)
+        x = numpy.arange(len(self.data['x']))
         for key in self.data.keys():
-            #画各个方块
-            value = self.data[key]
-            x = numpy.arange(len(value['x']))
-            rects = chart.bar(x+self.barWidth/count*index, value['y'], self.barWidth, label=key)
+            if key == 'x':
+                continue
+            rects = chart.bar(x+self.barWidth/count*index, self.data[key], self.barWidth, label=key)
             self.__DisplayBarValue(chart, rects)
             index += 1
         chart.set(xlabel=self.x, ylabel=self.y, title = self.title)

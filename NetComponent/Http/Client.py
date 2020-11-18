@@ -35,7 +35,7 @@ class Client(object):
     async def _Task(self, urlRequest: UrlRequest):
         return self._HandleRequest(urlRequest)
     
-    async def _main(self):
+    async def _Main(self):
         loop = asyncio.get_running_loop()
         for request in self.asyncRequests:
             task = loop.create_task(self._Task(request))
@@ -46,7 +46,7 @@ class Client(object):
         self.asyncRequests.append(urlRequest)
     
     def AsyncRunRequest(self):
-        asyncio.run(self._main())
+        asyncio.run(self._Main())
     
     def Get(self, url):
         urlReq = UrlRequest()

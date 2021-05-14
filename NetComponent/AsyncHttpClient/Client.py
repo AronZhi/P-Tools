@@ -5,6 +5,12 @@ from ReqObj import ReqObj
 
 class Client(object):
     def __init__(self):
+        """
+        windows环境python3.7及以上版本tornado使用asyncio抛出NotImplementedError异常，
+        试用前需要以下处理
+        if psutil.WINDOWS and sys.version_info >= (3,7):
+            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+        """
         self.client: tornado.httpclient.AsyncHTTPClient = tornado.httpclient.AsyncHTTPClient()
         self.reqList = list()
         self.ioLoop = tornado.ioloop.IOLoop.current()

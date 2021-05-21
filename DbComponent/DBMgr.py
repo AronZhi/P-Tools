@@ -1,33 +1,24 @@
-import pymysql
-from influxdb import InfluxDBClient
+from DBObj import *
 
 class DBMgr(object):
     def __init__(self) -> None:
-        self.mysqlMap = map()
-        self.influxdbMap = map()
+        self.DBObjMap = {}
     
     def __del__(self):
-        for db in self.mysqlMap:
-            db.close()
-        for db in self.influxdbMap:
-            db.close()
-
-    def AddMySql(self, config):
-        connection =  pymysql.Connect(**config)
-        db = self.mysqlMap.get(config["db"], None)
-        if db:
-            db.close()
-        self.mysqlMap[config["db"]]= connection
+        for db in self.DBObjMap:
+            db.Close()
     
-    def GetMysql(self, db: str)->pymysql.Connection:
-        return self.mysqlMap.get(db, None)
+    def AddDB(self, name, db: DBObj):
+        old = self.DBObjMap.get(name, None)
+        if old:
+            old.Close()
+        self.DBObjMap[name] = db
     
-    def AddInfluxDB(self, config):
-        connection = InfluxDBClient(**config)
-        db = self.mysqlMap.get(config["database"], None)
-        if db:
-            db.close()
-        self.influxdbMap[config["database"]]= connection
+    def GetDBConnection(self, name):
+        obj = self.DBObjMap.get(name, None)
+        if obj:
+            return obj.GetConnection()
+        return None
     
-    def GetInfluxDB(self, db: str)->InfluxDBClient:
-        return self.influxdbMap.get(db, None)
+    def GetDB(self, name):
+        return self.DBObjMap.get(name, None)

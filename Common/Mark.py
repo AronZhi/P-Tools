@@ -10,7 +10,7 @@ class Mark(object):
     def MarkFuncInfo(cls, func):
         @wraps(func)
         def fetchInfo(*args, **kwargs):
-            data = {"func": func.__name__, "kwargs": kwargs}
+            data = {"module": func.__module__, "func": func.__name__, "kwargs": kwargs, "args": args}
             jsonData = json.dumps(data)
             cls.handleFuncInfo(jsonData)
             ret = func(*args, **kwargs)
@@ -34,12 +34,23 @@ class Mark(object):
 """
 @Mark.MarkFuncProcess
 @Mark.MarkFuncInfo
-def test(test):
+def test1(a, b, c, *args):
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print(test)
+    print(args)
     #print(kwargs)
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
-if __name__ == "__main__":
-    test(test=1)
+@Mark.MarkFuncProcess
+@Mark.MarkFuncInfo
+def test2(*args, a, b, c):
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    print(args)
+    #print(kwargs)
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+test1(1, 2, 3, 1, 2, 1)
+#test1(1, 2, 3, a=1, b=2, c=1)
+#test1(a=1, b=2, c=3, 1, 2, 1)
+test2(1, 2, 3, a=1, b=2, c=1)
+#test2(1, 2, 3, 1, 2, 1)
 """

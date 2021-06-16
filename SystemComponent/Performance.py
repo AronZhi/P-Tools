@@ -19,10 +19,8 @@ class PerformanceInfo(object):
                 continue
         return cpu_percent, memory_usage
 
-"""
 if __name__ == "__main__":
     performanceInfo = PerformanceInfo()
     print(performanceInfo.GetCpuPercent())
     print(performanceInfo.GetMemoryPercent())
     print(performanceInfo.GetProcessRunInfo('firefox'))
-"""

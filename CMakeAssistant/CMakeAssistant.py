@@ -65,7 +65,6 @@ class CMakeAssistant(object):
     def __handleOutput(self):
         info = self.config.get("output", {"type": "exe", "name": "CMakeProj"})
         text = ""
-        print(info)
         dir = info.get("dir", None)
         build_type = info["type"]
         name = info["name"]
@@ -114,9 +113,8 @@ class CMakeAssistant(object):
             self.__handle(f, self.__handleLinkDir())
             self.__handle(f, self.__handleOutput())
             self.__handle(f, self.__handleLinkLib())
+            print("generated cmake list file")
         
-"""
 if __name__ == "__main__":
-    test = CMakeAssistant(r"C:\WorkSpace\Test\P-Tools\CMakeAssistant\template.json", r"C:\WorkSpace\Test\P-Tools\CMakeAssistant")
+    test = CMakeAssistant(r"C:\WorkSpace\Test\C-Tools\proj\proj.json", r"C:\WorkSpace\Test\C-Tools")
     test.generateCmake()
-"""

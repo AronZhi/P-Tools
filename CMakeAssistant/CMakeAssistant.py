@@ -1,6 +1,5 @@
 import json
 import os
-from typing import Text
 
 class CMakeAssistant(object):
     def __init__(self, json_config_file, output_path):

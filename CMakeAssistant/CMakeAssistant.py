@@ -67,11 +67,15 @@ class CMakeAssistant(object):
         text = ""
         print(info)
         dir = info.get("dir", None)
-        if dir:
-            path = self.__convertPath(dir)
-            text += "set(CMAKE_RUNTIME_OUTPUT_DIRECTORY %s)\n" % path
         build_type = info["type"]
         name = info["name"]
+        if dir:
+            path = self.__convertPath(dir)
+            if build_type.lower() == "execute":
+                text += "set(EXECUTABLE_OUTPUT_PATH %s)\n" % path
+            else:
+                text += "set(LIBRARY_OUTPUT_PATH %s)\n" % path
+        
         if build_type.lower() == "execute":
             text += "add_executable(%s" % name
         elif build_type.lower() == "dynamic_lib":

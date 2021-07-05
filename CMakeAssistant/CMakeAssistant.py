@@ -114,7 +114,9 @@ class CMakeAssistant(object):
             self.__handle(f, self.__handleOutput())
             self.__handle(f, self.__handleLinkLib())
             print("generated cmake list file")
-        
+
+"""        
 if __name__ == "__main__":
     test = CMakeAssistant(r"C:\WorkSpace\Test\C-Tools\proj\proj.json", r"C:\WorkSpace\Test\C-Tools")
     test.generateCmake()
+"""

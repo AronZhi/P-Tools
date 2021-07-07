@@ -8,28 +8,37 @@ class PerformanceInfo(object):
     def GetMemoryPercent(self):
         return psutil.virtual_memory().percent
     
-    def GetProcessRunInfo(self, process_name):
-        cpu_percent = 0
-        memory_usage = 0
+    def GetProcess(self, process_name):
         process_list =[]
         for process in psutil.process_iter():
             try:
                 if process_name.lower() == process.name().lower():
                     process_list.append(process)
-                    memory_usage += process.memory_info().rss
             except (psutil.AccessDenied, psutil.ZombieProcess):
                 continue
+        return process_list
+    
+    def GetProcessMemoryUsage(self, process_list):
+        memory_usage = 0.0
+        for process in process_list:
+            memory_usage += process.memory_info().rss
+        return memory_usage
+    
+    def GetProcessCpuPercent(self, process_list):
+        cpu_percent = 0.0
         for process in process_list:
             cpu_percent += process.cpu_percent(None)
         sleep(2)
         for process in process_list:
             cpu_percent += process.cpu_percent(None)
-        return cpu_percent, memory_usage
+        return cpu_percent
 
 """
 if __name__ == "__main__":
     performanceInfo = PerformanceInfo()
     print(performanceInfo.GetCpuPercent())
     print(performanceInfo.GetMemoryPercent())
-    print(performanceInfo.GetProcessRunInfo('firefox'))
+    process_list = performanceInfo.GetProcess('firefox.exe')
+    print(performanceInfo.GetProcessCpuPercent(process_list))
+    print(performanceInfo.GetProcessMemoryUsage(process_list))
 """

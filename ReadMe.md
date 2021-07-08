@@ -1,9 +1,8 @@
+## 说明
+* 平时积累的工具
+
 ## 环境
 * python3.7以上
-* 需要将Spider加入到python搜索路径
-    ```
-    运行AddSource.py, 输入utilcomponent所在路径
-    ```
 
 ## Common
 * 一些常用的工具，比如单例装饰器，函数log装饰器，logger

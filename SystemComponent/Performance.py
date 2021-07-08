@@ -12,10 +12,10 @@ class PerformanceInfo(object):
         process_list =[]
         for process in psutil.process_iter():
             try:
-                if process_name.lower() == process.name().lower():
+                if process_name.lower() in process.name().lower():
                     process_list.append(process)
             except (psutil.AccessDenied, psutil.ZombieProcess):
-                continue
+                pass
         return process_list
     
     def GetProcessMemoryUsage(self, process_list):

@@ -37,9 +37,10 @@ class PerformanceMonitor(object):
         self.monitor.join()
         self.monitor = None
 
-
+"""
 if __name__ == "__main__":
     monitor = PerformanceMonitor()
     monitor.start(["firefox"])
     time.sleep(10)
     monitor.stop()
+"""

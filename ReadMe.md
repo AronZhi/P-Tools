@@ -14,6 +14,12 @@
 ## NetComponet
 * 需要tornado 6.0.4
 * 网络操作相关, http提供了支持异步io的http server和http client
+
+## ConfigComponent
+* 读取json配置文件
+
+## SystemComponent
+* 监控CPU和memory
   
 ## CMakeAssistant
 * 将固定格式的json文件转换成CMakeList文件

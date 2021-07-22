@@ -4,20 +4,18 @@ from Performance import PerformanceInfo
 
 def work(pro_names, queue):
     performanceInfo = PerformanceInfo()
-    process_list = []
-    for name in pro_names:
-        process_list += performanceInfo.GetProcess(name)
-        if len(process_list) == 0:
-            print("can not find process")
-            return
-        while True:
-            if not queue.empty():
-                msg = queue.get()
-                if msg.lower() == "stop":
-                    print("stop mointoring")
-                    return
-            print(performanceInfo.GetProcessMemoryUsage(process_list))
-            print(performanceInfo.GetProcessCpuPercent(process_list))
+    process_list = performanceInfo.GetProcess(pro_names)
+    if len(process_list) == 0:
+        print("can not find process")
+        return
+    while True:
+        if not queue.empty():
+            msg = queue.get()
+            if msg.lower() == "stop":
+                print("stop mointoring")
+                return
+        print(performanceInfo.GetProcessMemoryUsage(process_list))
+        print(performanceInfo.GetProcessCpuPercent(process_list))
 
 class PerformanceMonitor(object):
     def __init__(self):

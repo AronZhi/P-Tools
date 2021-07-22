@@ -17,12 +17,16 @@ class PerformanceInfo(object):
         return num_procs
     """
 
-    def GetProcess(self, process_name):
+    def GetProcess(self, process_names: list):
         process_list =[]
+        pid_count = {}
         for process in psutil.process_iter():
             try:
-                if process_name.lower() in process.name().lower():
-                    process_list.append(process)
+                for process_name in process_names:
+                    if process_name.lower() in process.name().lower():
+                        if pid_count.get(process.pid, 0) == 0:
+                            process_list.append(process)
+                            pid_count[process.ppid()] = 1
             except (psutil.AccessDenied, psutil.ZombieProcess):
                 pass
         return process_list
@@ -45,11 +49,11 @@ class PerformanceInfo(object):
 """
 if __name__ == "__main__":
     performanceInfo = PerformanceInfo()
-    print(performanceInfo.GetCpuPercent())
-    print(performanceInfo.GetMemoryPercent())
+    #print(performanceInfo.GetCpuPercent())
+    #print(performanceInfo.GetMemoryPercent())
     #print(performanceInfo.GetGPUPercent())
-    process_list1 = performanceInfo.GetProcess('webex')
-    process_list2 = performanceInfo.GetProcess('atmgr')
+    process_list = performanceInfo.GetProcess(['cisco', 'webex', 'atmgr'])
+    print(process_list)
     process_list = process_list1 + process_list2
     print(process_list)
     print(performanceInfo.GetProcessCpuPercent(process_list))

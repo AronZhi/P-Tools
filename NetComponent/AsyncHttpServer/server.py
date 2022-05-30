@@ -3,7 +3,10 @@ import tornado.httpserver
 import tornado.ioloop
 
 class Server(object):
-    def Run(self, port: int, protocol: list):
+    @classmethod
+    def start(cls,
+              port: int,
+              protocol: list):
         """
         windows环境python3.7及以上版本tornado使用asyncio抛出NotImplementedError异常，
         试用前需要以下处理
@@ -14,3 +17,7 @@ class Server(object):
         httpServer = tornado.httpserver.HTTPServer(app)
         httpServer.listen(port)
         tornado.ioloop.IOLoop.instance().start()
+    
+    @classmethod
+    def stop(cls):
+        tornado.ioloop.IOLoop.instance().stop()

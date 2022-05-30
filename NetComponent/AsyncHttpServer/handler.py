@@ -1,10 +1,8 @@
-import asyncio
 import json
-import tornado.web
-import tornado.ioloop
+from tornado.web import RequestHandler
 
-class Handler(tornado.web.RequestHandler):
-    def ParseRequest(self):
+class Handler(RequestHandler):
+    def parseRequest(self):
         data = dict()        
         if self.request.headers.get('Content-Type') == 'application/json':
             data = json.loads(self.request.body.decode())
@@ -13,6 +11,10 @@ class Handler(tornado.web.RequestHandler):
                 data[key] = self.get_argument(key)
         return data
     
-    def StopServer(self):
-        tornado.ioloop.IOLoop.instance().stop()
+    def sendResult(self,
+                   comment,
+                   ret = {}):
+        ret['comment'] = comment
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps(ret))
         

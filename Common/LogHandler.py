@@ -1,9 +1,11 @@
 import logging
 import os
-from logging.handlers import RotatingFileHandler
+#from logging.handlers import RotatingFileHandler
 
 class LogHandler(logging.Logger):
-    def __init__(self, name: str, logDir = ''):
+    def __init__(self,
+                 name: str,
+                 logDir = ''):
         # super init
         logging.Logger.__init__(self, name)
     

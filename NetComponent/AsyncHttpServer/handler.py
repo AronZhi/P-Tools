@@ -1,6 +1,7 @@
 import json
 from tornado.web import RequestHandler
 
+
 class Handler(RequestHandler):
     def parseRequest(self):
         data = dict()        
@@ -11,10 +12,14 @@ class Handler(RequestHandler):
                 data[key] = self.get_argument(key)
         return data
     
-    def sendResult(self,
+    def sendJson(self,
                    comment,
-                   ret = {}):
+                   **kwargs):
+        ret = dict()
+        ret.clear()
         ret['comment'] = comment
-        self.set_header("Content-Type", "application/json")
+        if len(kwargs) > 0:
+            ret.update(kwargs)
+        self.set_header()
         self.write(json.dumps(ret))
         

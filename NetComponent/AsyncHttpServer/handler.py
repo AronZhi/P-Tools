@@ -15,11 +15,7 @@ class Handler(RequestHandler):
     def sendJson(self,
                    comment,
                    **kwargs):
-        ret = dict()
-        ret.clear()
-        ret['comment'] = comment
-        if len(kwargs) > 0:
-            ret.update(kwargs)
+        kwargs['comment'] = comment
         self.set_header()
-        self.write(json.dumps(ret))
+        self.write(json.dumps(kwargs))
         

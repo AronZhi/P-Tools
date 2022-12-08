@@ -24,7 +24,6 @@ class CMakeLists(object):
         c_file = h_name + ".c"
         cpp_file = h_name + ".cpp"
         for file_name in [h_file, c_file, cpp_file]:
-            print(file_name)
             if os.path.exists(os.path.join(self.proj_path, file_name)):
                 self.source_files.append(file_name)
 

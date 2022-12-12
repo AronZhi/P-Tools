@@ -1,13 +1,12 @@
 import os
 
 
-def allFiles(dir)->str:
-    for root, ds, fs in os.walk(dir):
+def allFiles(dir) -> str:
+    for root, _, fs in os.walk(dir):
         for f in fs:
-            file_path = os.path.join(root, f)
-            yield file_path
+            yield os.path.join(root, f)
 
-def main():
+def main():  # sourcery skip: avoid-builtin-shadow
     dir = input("input dir path: ")
     target_file = input("input file name: ")
     for f in allFiles(dir):

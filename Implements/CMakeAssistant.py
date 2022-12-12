@@ -6,23 +6,23 @@ class CMakeLists(object):
         self.main_file = main_file
         self.proj_path = proj_path
         if main_file.endswith(".cpp"):
-            self.proj_name:str = main_file[0:-4]
+            self.proj_name:str = main_file[:-4]
         else:
-            self.proj_name:str = main_file[0:-2]
+            self.proj_name:str = main_file[:-2]
         self.source_files = [main_file]
     
     def _parseIncludes(self, header_file_name: str):
         #添加当前目录下的文件到source_files里
-        path_split_char = '/' if header_file_name.find('/') >= 0 else '\\'
+        path_split_char = '/' if '/' in header_file_name else '\\'
         lst = header_file_name.split(path_split_char)
         if len(lst) > 2:
             return
         elif len(lst) == 2 and lst[0] != ".":
             return
         h_file = lst[-1]
-        h_name = h_file[0:-4] if h_file.endswith(".hpp") else h_file[0:-2]
-        c_file = h_name + ".c"
-        cpp_file = h_name + ".cpp"
+        h_name = h_file[:-4] if h_file.endswith(".hpp") else h_file[:-2]
+        c_file = f"{h_name}.c"
+        cpp_file = f"{h_name}.cpp"
         for file_name in [h_file, c_file, cpp_file]:
             if os.path.exists(os.path.join(self.proj_path, file_name)):
                 self.source_files.append(file_name)

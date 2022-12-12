@@ -9,8 +9,8 @@ class FilterDriverCommand:
         self.driver_name = self.searchDriverName()
         self.install_cmd = "RUNDLL32.EXE SETUPAPI.DLL,InstallHinfSection DefaultInstall 132 C:\DriverTest\Drivers\%s.inf" % self.driver_name
         self.uninstall_cmd = "RUNDLL32.EXE SETUPAPI.DLL,InstallHinfSection DefaultUninstall 132 C:\DriverTest\Drivers\%s.inf" % self.driver_name
-        self.load_cmd = "FLTMC load %s" % self.driver_name
-        self.unload_cmd = "FLTMC unload %s" % self.driver_name
+        self.load_cmd = f"FLTMC load {self.driver_name}"
+        self.unload_cmd = f"FLTMC unload {self.driver_name}"
         self.check_installed_cmd = "Driverquery | findstr \"%s\"" % self.driver_name
         self.check_loaded_cmd = "FLTMC filters | findstr \"%s\"" % self.driver_name
 
@@ -19,7 +19,7 @@ class FilterDriverCommand:
             for f in fs:
                 if f.endswith(".sys"):
                     index = f.find(".sys")
-                    drv_name = f[0:index]
+                    drv_name = f[:index]
                     print("driver name: ", drv_name)
                     return drv_name
         assert False, "can not find .sys file"

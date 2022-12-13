@@ -31,13 +31,15 @@ class CMakeLists(object):
         with open("cmakelists.txt", "w") as f:
             #检查版本
             f.write("cmake_minimum_required(VERSION 3.0.0)\n")
+            #设置工程名
+            f.write(f"project({self.proj_name})\n")
             #设置C++标准
-            f.write("set(CMAKE_CXX_STANDARD 14)\n")
-            #设置工程编译语言
-            f.write("project(%s LANGUAGES C CXX)\n" % self.proj_name)
+            f.write("set(CMAKE_CXX_STANDARD 20)\n")
+            f.write("set(CMAKE_CXX_STANDARD_REQUIRED ON)\n")
+            f.write("set(CMAKE_CXX_EXTENSIONS OFF)\n") # 开启编译器的特定的扩展，ON便是只用ISO C++ 标准
             #设置输出路径
             f.write("set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})\n")
-            #设置需要编译的文件
+            #添加需要编译的文件
             file_lst = ""
             for cpp_file in self.source_files:
                 file_lst += " "
@@ -46,7 +48,6 @@ class CMakeLists(object):
             f.write("set(FILE_LIST%s)\n" % file_lst)
             #编译文件
             f.write("add_executable(%s ${FILE_LIST})" % self.proj_name)
-            # 链接
     
     def generate(self):
         with open(self.main_file, 'r') as f:

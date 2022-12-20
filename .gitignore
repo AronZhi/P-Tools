@@ -1,5 +1,13 @@
+# cache
 */__pycache__/
 __pycache__/
+
+# log
 .idea/
 */Log/
-/Log/
+Log/
+
+# build
+*.spec
+build/
+dist/

@@ -1,6 +1,5 @@
 import subprocess
 import os
-import time
 
 
 class FilterDriverCommand:
@@ -33,27 +32,22 @@ class FilterDriverCommand:
         return ret
 
     def uninstall(self):
-        res = self.execute_command(self.check_loaded_cmd)
-        if res:
+        if self.execute_command(self.check_loaded_cmd):
             self.execute_command(self.unload_cmd)
-        res = self.execute_command(self.check_installed_cmd)
-        if res:
+        if self.execute_command(self.check_installed_cmd):
             self.execute_command(self.uninstall_cmd)
     
-    def install(self):
+    def reinstall(self):
         self.uninstall()
         self.execute_command(self.install_cmd)
         self.execute_command(self.load_cmd)
     
-    def load(self):
-        res = self.execute_command(self.check_installed_cmd)
-        if res == "":
+    def install(self):
+        if self.execute_command(self.check_installed_cmd) == "":
             self.execute_command(self.install_cmd)
-        res = self.execute_command(self.check_loaded_cmd)
-        if res == "":
+        if self.execute_command(self.check_loaded_cmd) == "":
             self.execute_command(self.load_cmd)
 
-    
     def showInstalled(self):
         print("install stauts: ")
         self.execute_command(self.check_installed_cmd)
@@ -69,7 +63,7 @@ if __name__ == "__main__":
         command.install()
     elif choice == "u":
         command.uninstall()
-    elif choice == "l":
-        command.load()
+    elif choice == "r":
+        command.reinstall()
     else:
         command.showInstalled()

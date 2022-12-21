@@ -3,6 +3,11 @@ from aiohttp import web
 from handler import *
 
 class Server(object):
+    """
+    !!!
+    这个server只能处理application/json的请求
+    headers = { "Content-Type":"application/json" }
+    """
     def __init__(self, port=8888, event_loop = None):
         if event_loop is None:
             """

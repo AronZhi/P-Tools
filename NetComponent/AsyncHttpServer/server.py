@@ -2,7 +2,7 @@ import asyncio
 from aiohttp import web
 from handler import *
 
-class AdminServer(object):
+class Server(object):
     def __init__(self, port=8888, event_loop = None):
         if event_loop is None:
             """
